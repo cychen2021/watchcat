@@ -179,6 +179,15 @@ wheels = [
 ]
 
 [[package]]
+name = "phdkit"
+version = "0.1.0"
+source = { git = "https://github.com/cychen2021/phdkit.git#09d2d6956962538822f0f23d7f5ca261a891425d" }
+dependencies = [
+    { name = "click" },
+    { name = "tqdm" },
+]
+
+[[package]]
 name = "pydantic"
 version = "2.11.4"
 source = { registry = "https://pypi.org/simple" }
@@ -438,6 +447,7 @@ source = { editable = "." }
 dependencies = [
     { name = "agno" },
     { name = "click" },
+    { name = "phdkit" },
     { name = "sqlite-vec" },
     { name = "tqdm" },
 ]
@@ -446,6 +456,7 @@ dependencies = [
 requires-dist = [
     { name = "agno", specifier = ">=1.4.5" },
     { name = "click", specifier = ">=8.1.8" },
+    { name = "phdkit", git = "https://github.com/cychen2021/phdkit.git" },
     { name = "sqlite-vec", specifier = ">=0.1.6" },
     { name = "tqdm", specifier = ">=4.67.1" },
 ]
