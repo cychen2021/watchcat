@@ -1,0 +1,18 @@
+[project]
+name = "jiejiebeast"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Chuyang Chen", email = "chuyangchen2018@outlook.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+license = {file = "LICENSE"}
+
+[project.scripts]
+jiejiebeast = "jiejiebeast:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
