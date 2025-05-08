@@ -25,3 +25,8 @@ build-backend = "hatchling.build"
 
 [tool.uv.sources]
 phdkit = { git = "https://github.com/cychen2021/phdkit.git" }
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+]
