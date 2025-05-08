@@ -7,7 +7,11 @@ authors = [
     { name = "Chuyang Chen", email = "chuyangchen2018@outlook.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "agno>=1.4.5",
+    "click>=8.1.8",
+    "tqdm>=4.67.1",
+]
 license = {file = "LICENSE"}
 
 [project.scripts]
