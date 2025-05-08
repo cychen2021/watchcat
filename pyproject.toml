@@ -10,6 +10,7 @@ requires-python = ">=3.12"
 dependencies = [
     "agno>=1.4.5",
     "click>=8.1.8",
+    "sqlite-vec>=0.1.6",
     "tqdm>=4.67.1",
 ]
 license = {file = "LICENSE"}
