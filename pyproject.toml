@@ -1,5 +1,5 @@
 [project]
-name = "jiejiebeast"
+name = "watchcat"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -15,7 +15,7 @@ dependencies = [
 license = {file = "LICENSE"}
 
 [project.scripts]
-jiejiebeast = "jiejiebeast:main"
+watchcat = "watchcat:main"
 
 [build-system]
 requires = ["hatchling"]
