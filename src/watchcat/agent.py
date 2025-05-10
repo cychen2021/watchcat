@@ -31,7 +31,7 @@ class ProviderInfo(ABC):
 
 @dataclass
 class GeminiProviderInfo(ProviderInfo):
-    api_key: str
+    api_key: str | None
 
 
 @dataclass
