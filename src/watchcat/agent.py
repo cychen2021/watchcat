@@ -20,7 +20,7 @@ def __read_config(config_file: str | None = None):
     return config
 
 
-def __read_env_config(config_file: str | None = None):
+def __read_env(config_file: str | None = None):
     with open(config_file if config_file is not None else "env.toml", "rb") as f:
         return tomllib.load(f)
 
@@ -40,7 +40,7 @@ class ModelInfo:
     embedding_model: str | None
 
 
-@configurable(__read_config, __read_env_config)
+@configurable(__read_config, __read_env)
 class Agent:
     @property
     def model(self):
