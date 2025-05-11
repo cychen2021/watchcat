@@ -42,6 +42,7 @@ def __read_env(config_file: str | None = None):
 class ProviderInfo:
     base_url: str | None
 
+
 @dataclass
 class GeminiProviderInfo(ProviderInfo):
     api_key: str | None
@@ -95,7 +96,7 @@ class Agent:
     @setting("provider.gemini.base_url")
     def gemini_base_url(self, gemini_base_url):
         if "gemini" not in self.__provider_info:
-            self.__provider_info["gemini"] = GeminiProviderInfo(base_url=gemini_base_url) # type: ignore
+            self.__provider_info["gemini"] = GeminiProviderInfo(base_url=gemini_base_url)  # type: ignore
         else:
             self.__provider_info["gemini"].base_url = gemini_base_url
 
@@ -109,7 +110,9 @@ class Agent:
     @setting("provider.gemini.api_key")
     def gemini_api_key(self, gemini_api_key):
         if "gemini" not in self.__provider_info:
-            self.__provider_info["gemini"] = GeminiProviderInfo(api_key=gemini_api_key, base_url=None)
+            self.__provider_info["gemini"] = GeminiProviderInfo(
+                api_key=gemini_api_key, base_url=None
+            )
         else:
             self.__provider_info["gemini"].api_key = gemini_api_key  # type: ignore
 
@@ -166,10 +169,17 @@ class Agent:
             api_key=api_key,
         )
         from litellm.types.utils import EmbeddingResponse
-        assert isinstance(response, EmbeddingResponse), f"Expected EmbeddingResponse, got {type(response)}"
-        assert isinstance(response.data, list), f"Expected list, got {type(response.data)}"
+
+        assert isinstance(
+            response, EmbeddingResponse
+        ), f"Expected EmbeddingResponse, got {type(response)}"
+        assert isinstance(
+            response.data, list
+        ), f"Expected list, got {type(response.data)}"
         if response.data:
-            assert isinstance(response.data[0], float), f"Expected float, got {type(response.data[0])}"
+            assert isinstance(
+                response.data[0], float
+            ), f"Expected float, got {type(response.data[0])}"
         return response.data
 
     def update_topic_embedding(self):
@@ -180,14 +190,12 @@ class Agent:
         self.__topic_embedding = self.__get_embedding(self.topic)
 
     @staticmethod
-    def compare_embeddings(
-        embedding1: list[float], embedding2: list[float]
-    ) -> float:
+    def compare_embeddings(embedding1: list[float], embedding2: list[float]) -> float:
         if len(embedding1) != len(embedding2):
             raise ValueError("Embeddings must be of the same length")
         dot_product = sum(a * b for a, b in zip(embedding1, embedding2))
-        norm1 = sum(a ** 2 for a in embedding1) ** 0.5
-        norm2 = sum(b ** 2 for b in embedding2) ** 0.5
+        norm1 = sum(a**2 for a in embedding1) ** 0.5
+        norm2 = sum(b**2 for b in embedding2) ** 0.5
         return dot_product / (norm1 * norm2) if norm1 and norm2 else 0.0
 
     def fetch_papers(self) -> Sequence[ArxivPaper]:
@@ -223,7 +231,10 @@ class Agent:
         worth = relevance >= self.__relevance_threshold
 
         if worth:
-            logger.info("Worth reading paper", f"Paper {paper.id} is worth reading (relevance: {relevance})")
+            logger.info(
+                "Worth reading paper",
+                f"Paper {paper.id} is worth reading (relevance: {relevance})",
+            )
 
         return worth
 
