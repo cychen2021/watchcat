@@ -3,13 +3,13 @@ from abc import ABC
 from dataclasses import dataclass
 from phdkit.configlib import configurable, setting
 from typing import Sequence
-from .paper import ArxivPaper
 from arxiv import (
     Client as ArxivClient,
     Search as ArxivSearch,
     SortCriterion as ArxivSortCriterion,
 )
 from datetime import datetime, UTC
+from .paper import ArxivPaper
 
 
 def __read_config(config_file: str | None = None):
