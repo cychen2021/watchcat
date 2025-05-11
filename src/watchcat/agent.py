@@ -2,7 +2,7 @@ import tomllib
 from abc import ABC
 from dataclasses import dataclass
 from phdkit.configlib import configurable, setting
-from phdkit.log import Logger, LogOutput, EmailNotifier
+from phdkit.log import Logger
 from typing import Sequence
 from arxiv import (
     Client as ArxivClient,
