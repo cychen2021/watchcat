@@ -9,6 +9,7 @@ from arxiv import (
     SortCriterion as ArxivSortCriterion,
 )
 from datetime import datetime, UTC
+from litellm import embedding
 from .paper import ArxivPaper
 
 
@@ -33,9 +34,9 @@ def __read_env(config_file: str | None = None):
         return tomllib.load(f)
 
 
-class ProviderInfo(ABC):
-    pass
-
+@dataclass
+class ProviderInfo:
+    base_url: str | None
 
 @dataclass
 class GeminiProviderInfo(ProviderInfo):
@@ -48,7 +49,7 @@ class ModelInfo:
     embedding_model: str | None
 
 
-@configurable(__read_config, __read_env)
+@configurable(__read_config, __read_env, config_key="agent")
 class Agent:
     MAX_PAPERS_PER_DAY = 100
 
@@ -81,6 +82,20 @@ class Agent:
             self.update_topic_embedding()
 
     @property
+    def gemini_base_url(self):
+        if "gemini" not in self.__provider_info:
+            return None
+        return self.__provider_info["gemini"].base_url
+
+    @gemini_base_url.setter
+    @setting("provider.gemini.base_url")
+    def gemini_base_url(self, gemini_base_url):
+        if "gemini" not in self.__provider_info:
+            self.__provider_info["gemini"] = GeminiProviderInfo(base_url=gemini_base_url) # type: ignore
+        else:
+            self.__provider_info["gemini"].base_url = gemini_base_url
+
+    @property
     def gemini_api_key(self):
         if "gemini" not in self.__provider_info:
             return None
@@ -90,7 +105,7 @@ class Agent:
     @setting("provider.gemini.api_key")
     def gemini_api_key(self, gemini_api_key):
         if "gemini" not in self.__provider_info:
-            self.__provider_info["gemini"] = GeminiProviderInfo(api_key=gemini_api_key)
+            self.__provider_info["gemini"] = GeminiProviderInfo(api_key=gemini_api_key, base_url=None)
         else:
             self.__provider_info["gemini"].api_key = gemini_api_key  # type: ignore
 
@@ -135,9 +150,30 @@ class Agent:
 
         self.__relevance_threshold: float = 0.7
 
-    def __get_embedding(self, text: str) -> list[float]: ...
+    def __get_embedding(self, text: str) -> list[float]:
+        match self.embedding_model:
+            case "gemini-embedding-exp-03-07":
+                api_base = self.gemini_base_url
+                api_key = self.gemini_api_key
+        response = embedding(
+            model=self.embedding_model,
+            input=[text],
+            api_base=api_base,
+            api_key=api_key,
+        )
+        from litellm.types.utils import EmbeddingResponse
+        assert isinstance(response, EmbeddingResponse), f"Expected EmbeddingResponse, got {type(response)}"
+        assert isinstance(response.data, list), f"Expected list, got {type(response.data)}"
+        if response.data:
+            assert isinstance(response.data[0], float), f"Expected float, got {type(response.data[0])}"
+        return response.data
 
-    def update_topic_embedding(self): ...
+    def update_topic_embedding(self):
+        if self.topic is None:
+            raise ValueError("Topic is not set")
+        if self.embedding_model is None:
+            raise ValueError("Embedding model is not set")
+        self.__topic_embedding = self.__get_embedding(self.topic)
 
     @staticmethod
     def compare_embeddings(
@@ -175,4 +211,7 @@ class Agent:
         relevance = self.compare_embeddings(topic_embedding, paper_embedding)
         return relevance >= self.__relevance_threshold
 
-    def get_paper_embedding(self, paper: ArxivPaper) -> list[float]: ...
+    def get_paper_embedding(self, paper: ArxivPaper) -> list[float]:
+        if self.embedding_model is None:
+            raise ValueError("Embedding model is not set")
+        return self.__get_embedding(paper.summary)
