@@ -13,7 +13,7 @@ from datetime import datetime, UTC
 from litellm import embedding
 from .paper import ArxivPaper
 
-logger = Logger(__file__, outputs=[LogOutput.stderr()])
+logger = Logger(__file__)
 
 
 def __read_config(config_file: str | None = None):
