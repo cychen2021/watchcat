@@ -2,6 +2,7 @@ import tomllib
 from abc import ABC
 from dataclasses import dataclass
 from phdkit.configlib import configurable, setting
+from phdkit.log import Logger, LogOutput, EmailNotifier
 from typing import Sequence
 from arxiv import (
     Client as ArxivClient,
@@ -11,6 +12,9 @@ from arxiv import (
 from datetime import datetime, UTC
 from litellm import embedding
 from .paper import ArxivPaper
+
+email_notifier = EmailNotifier()
+logger = Logger(__file__, outputs=[LogOutput.stderr(), LogOutput.email(email_notifier)])
 
 
 def __read_config(config_file: str | None = None):
@@ -178,7 +182,13 @@ class Agent:
     @staticmethod
     def compare_embeddings(
         embedding1: list[float], embedding2: list[float]
-    ) -> float: ...
+    ) -> float:
+        if len(embedding1) != len(embedding2):
+            raise ValueError("Embeddings must be of the same length")
+        dot_product = sum(a * b for a, b in zip(embedding1, embedding2))
+        norm1 = sum(a ** 2 for a in embedding1) ** 0.5
+        norm2 = sum(b ** 2 for b in embedding2) ** 0.5
+        return dot_product / (norm1 * norm2) if norm1 and norm2 else 0.0
 
     def fetch_papers(self) -> Sequence[ArxivPaper]:
         now = datetime.now(UTC)
@@ -204,12 +214,18 @@ class Agent:
         return papers
 
     def worth_reading(self, paper: ArxivPaper) -> bool:
+        logger.info("Checking worthiness of paper", f"Paper {paper.id} ({paper.title})")
         topic_embedding = self.__topic_embedding
         if topic_embedding is None:
             raise ValueError("Topic embedding is not set")
         paper_embedding = self.get_paper_embedding(paper)
         relevance = self.compare_embeddings(topic_embedding, paper_embedding)
-        return relevance >= self.__relevance_threshold
+        worth = relevance >= self.__relevance_threshold
+
+        if worth:
+            logger.info("Worth reading paper", f"Paper {paper.id} is worth reading (relevance: {relevance})")
+
+        return worth
 
     def get_paper_embedding(self, paper: ArxivPaper) -> list[float]:
         if self.embedding_model is None:
