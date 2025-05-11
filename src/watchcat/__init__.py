@@ -1,6 +1,7 @@
 from phdkit.log import LogOutput, EmailNotifier
 from .agent import Agent, logger as agent_logger
 
+
 def main() -> None:
     email_notifier = EmailNotifier()
     email_notifier.load_config("mailog.config.toml", "mailog.env.toml")
