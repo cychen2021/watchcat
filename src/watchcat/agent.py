@@ -13,8 +13,7 @@ from datetime import datetime, UTC
 from litellm import embedding
 from .paper import ArxivPaper
 
-email_notifier = EmailNotifier()
-logger = Logger(__file__, outputs=[LogOutput.stderr(), LogOutput.email(email_notifier)])
+logger = Logger(__file__, outputs=[LogOutput.stderr()])
 
 
 def __read_config(config_file: str | None = None):
