@@ -1,7 +1,7 @@
 import tomllib
 from abc import ABC
 from dataclasses import dataclass
-from phdkit.configlib import configurable, setting, ConfigReader
+from phdkit.configlib import configurable, setting
 
 
 def __read_config(config_file: str | None = None):
