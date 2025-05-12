@@ -84,25 +84,29 @@ class Agent:
     def gemini_api_key(self) -> str | None:
         if "gemini" not in self.__provider_info:
             return None
-        return self.__provider_info["gemini"].api_key # type: ignore
+        return self.__provider_info["gemini"].api_key  # type: ignore
 
     @setting.setter("gemini_api_key")
     def gemini_api_key(self, value):
         if "gemini" not in self.__provider_info:
-            self.__provider_info["gemini"] = GeminiProviderInfo(api_key=value, base_url=None)
+            self.__provider_info["gemini"] = GeminiProviderInfo(
+                api_key=value, base_url=None
+            )
         else:
-            self.__provider_info["gemini"].api_key = value # type: ignore
-    
+            self.__provider_info["gemini"].api_key = value  # type: ignore
+
     @setting.getter("gemini_base_url")
     def gemini_base_url(self) -> str | None:
         if "gemini" not in self.__provider_info:
             return None
         return self.__provider_info["gemini"].base_url
-    
+
     @setting.setter("gemini_base_url")
     def gemini_base_url(self, value):
         if "gemini" not in self.__provider_info:
-            self.__provider_info["gemini"] = GeminiProviderInfo(api_key=None, base_url=value)
+            self.__provider_info["gemini"] = GeminiProviderInfo(
+                api_key=None, base_url=value
+            )
         else:
             self.__provider_info["gemini"].base_url = value
 
