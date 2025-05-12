@@ -1,5 +1,4 @@
 import tomllib
-from abc import ABC
 from dataclasses import dataclass
 from phdkit.configlib import configurable, setting
 from phdkit.log import Logger
@@ -53,99 +52,80 @@ class ModelInfo:
     embedding_model: str | None
 
 
-@configurable(__read_config, __read_env, config_key="agent")
+@configurable(__read_config, load_env=__read_env, config_key="agent")
 class Agent:
     MAX_PAPERS_PER_DAY = 100
 
-    @property
-    def model(self):
-        if self.__model is None:
-            return None
+    @setting.getter("model")
+    def model(self) -> str | None:
         return self.__model.generation_model
 
-    @model.setter
-    @setting("model")
-    def model(self, model):
+    @setting.setter("model")
+    def model(self, value):
         if self.__model is None:
-            self.__model = ModelInfo(generation_model=model, embedding_model=None)
+            self.__model = ModelInfo(generation_model=value, embedding_model=None)
         else:
-            self.__model.generation_model = model
+            self.__model.generation_model = value
 
-    @property
-    def embedding_model(self):
+    @setting.getter("embedding_model")
+    def embedding_model(self) -> str | None:
         if self.__model is None:
             return None
         return self.__model.embedding_model
 
-    @embedding_model.setter
-    @setting("embedding_model")
-    def embedding_model(self, embedding_model):
-        embedding_model_updated = embedding_model != self.__model.embedding_model
-        self.__model.embedding_model = embedding_model
+    @setting.setter("embedding_model")
+    def embedding_model(self, value):
+        embedding_model_updated = value != self.__model.embedding_model
+        self.__model.embedding_model = value
         if embedding_model_updated:
             self.update_topic_embedding()
 
-    @property
-    def gemini_base_url(self):
+    @setting.getter("gemini_api_key")
+    def gemini_api_key(self) -> str | None:
+        if "gemini" not in self.__provider_info:
+            return None
+        return self.__provider_info["gemini"].api_key # type: ignore
+
+    @setting.setter("gemini_api_key")
+    def gemini_api_key(self, value):
+        if "gemini" not in self.__provider_info:
+            self.__provider_info["gemini"] = GeminiProviderInfo(api_key=value, base_url=None)
+        else:
+            self.__provider_info["gemini"].api_key = value # type: ignore
+    
+    @setting.getter("gemini_base_url")
+    def gemini_base_url(self) -> str | None:
         if "gemini" not in self.__provider_info:
             return None
         return self.__provider_info["gemini"].base_url
-
-    @gemini_base_url.setter
-    @setting("provider.gemini.base_url")
-    def gemini_base_url(self, gemini_base_url):
+    
+    @setting.setter("gemini_base_url")
+    def gemini_base_url(self, value):
         if "gemini" not in self.__provider_info:
-            self.__provider_info["gemini"] = GeminiProviderInfo(base_url=gemini_base_url)  # type: ignore
+            self.__provider_info["gemini"] = GeminiProviderInfo(api_key=None, base_url=value)
         else:
-            self.__provider_info["gemini"].base_url = gemini_base_url
+            self.__provider_info["gemini"].base_url = value
 
-    @property
-    def gemini_api_key(self):
-        if "gemini" not in self.__provider_info:
-            return None
-        return self.__provider_info["gemini"].api_key  # type: ignore
-
-    @gemini_api_key.setter
-    @setting("provider.gemini.api_key")
-    def gemini_api_key(self, gemini_api_key):
-        if "gemini" not in self.__provider_info:
-            self.__provider_info["gemini"] = GeminiProviderInfo(
-                api_key=gemini_api_key, base_url=None
-            )
-        else:
-            self.__provider_info["gemini"].api_key = gemini_api_key  # type: ignore
-
-    @property
+    @setting.getter("topic")
     def topic(self):
         return self.__topic
 
-    @topic.setter
-    @setting("topic")
+    @setting.setter("topic")
     def topic(self, topic):
         topic_updated = topic != self.__topic
         self.__topic = topic
         if topic_updated:
             self.update_topic_embedding()
 
-    @property
-    def keywords(self):
-        return self.__keywords
-
-    @keywords.setter
     @setting("keywords")
-    def keywords(self, keywords):
-        self.__keywords = keywords
+    def keywords(self) -> list[str]: ...
 
-    @property
-    def relevance_threshold(self):
-        return self.__relevance_threshold
-
-    @relevance_threshold.setter
     @setting("relevance_threshold")
-    def relevance_threshold(self, relevance_threshold):
-        self.__relevance_threshold = relevance_threshold
+    def relevance_threshold(self) -> float: ...
 
     def __init__(self):
+        self.model = None
+
         self.__model: ModelInfo = ModelInfo(generation_model=None, embedding_model=None)
         self.__provider_info: dict[str, ProviderInfo] = {}
 
