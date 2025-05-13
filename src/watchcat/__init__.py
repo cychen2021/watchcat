@@ -5,7 +5,7 @@ from .agent import Agent, logger as agent_logger
 
 def main() -> None:
     email_notifier = EmailNotifier()
-    config[email_notifier].load("mailog.config.toml", "mailog.env.toml")
+    config[email_notifier].load("watchcat.config.toml", "watchcat.env.toml")
     agent_logger.add_output(LogOutput.email(email_notifier))
 
     agent = Agent()
