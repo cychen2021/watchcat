@@ -60,8 +60,8 @@ class Agent:
     def model(self) -> str | None:
         return self.__model.generation_model
 
-    @setting.setter("model")
-    def model(self, value):
+    @model.setter
+    def set_model(self, value):
         if self.__model is None:
             self.__model = ModelInfo(generation_model=value, embedding_model=None)
         else:
@@ -73,8 +73,8 @@ class Agent:
             return None
         return self.__model.embedding_model
 
-    @setting.setter("embedding_model")
-    def embedding_model(self, value):
+    @embedding_model.setter
+    def set_embedding_model(self, value):
         embedding_model_updated = value != self.__model.embedding_model
         self.__model.embedding_model = value
         if embedding_model_updated:
@@ -86,8 +86,8 @@ class Agent:
             return None
         return self.__provider_info["gemini"].api_key  # type: ignore
 
-    @setting.setter("gemini_api_key")
-    def gemini_api_key(self, value):
+    @gemini_api_key.setter
+    def set_gemini_api_key(self, value):
         if "gemini" not in self.__provider_info:
             self.__provider_info["gemini"] = GeminiProviderInfo(
                 api_key=value, base_url=None
@@ -101,8 +101,8 @@ class Agent:
             return None
         return self.__provider_info["gemini"].base_url
 
-    @setting.setter("gemini_base_url")
-    def gemini_base_url(self, value):
+    @gemini_base_url.setter
+    def set_gemini_base_url(self, value):
         if "gemini" not in self.__provider_info:
             self.__provider_info["gemini"] = GeminiProviderInfo(
                 api_key=None, base_url=value
@@ -111,11 +111,11 @@ class Agent:
             self.__provider_info["gemini"].base_url = value
 
     @setting.getter("topic")
-    def topic(self):
+    def topic(self) -> str | None:
         return self.__topic
 
-    @setting.setter("topic")
-    def topic(self, topic):
+    @topic.setter
+    def set_topic(self, topic: str | None):
         topic_updated = topic != self.__topic
         self.__topic = topic
         if topic_updated:
