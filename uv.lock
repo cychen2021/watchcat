@@ -640,7 +640,7 @@ wheels = [
 [[package]]
 name = "phdkit"
 version = "0.1.0"
-source = { git = "https://github.com/cychen2021/phdkit.git#133667aaf4b714a803aa1fa9b265f19b018eb2e1" }
+source = { git = "https://github.com/cychen2021/phdkit.git#9decf904aa8b2e4f6c3ac504593bf3558db19fc0" }
 dependencies = [
     { name = "click" },
     { name = "tqdm" },
