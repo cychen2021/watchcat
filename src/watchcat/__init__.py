@@ -8,7 +8,9 @@ from .agent import Agent, logger as agent_logger
 
 
 @click.command()
-@click.option("--develop", is_flag=True, help="Enable in-development mode.", default=True)
+@click.option(
+    "--develop", is_flag=True, help="Enable in-development mode.", default=True
+)
 def main(develop: bool) -> None:
     timestamp = datetime.now(UTC).strftime("%Y-%m-%d_%H:%M:%S")
     if not develop:
@@ -17,12 +19,18 @@ def main(develop: bool) -> None:
         agent_logger.add_output(LogOutput.email(email_notifier, level=LogLevel.WARNING))
     agent_logger.add_output(LogOutput.stderr())
     if platform.system() == "Windows":
-        appdata = os.getenv('LOCALAPPDATA')
+        appdata = os.getenv("LOCALAPPDATA")
         assert appdata is not None, "LOCALAPPDATA is not set"
-        log_path = os.path.realpath(os.path.join(appdata, f"watchcat_{timestamp}.jsonl"))
+        log_path = os.path.realpath(
+            os.path.join(appdata, f"watchcat_{timestamp}.jsonl")
+        )
     else:
-        log_path = os.path.realpath(os.path.join("/var/log", f"watchcat_{timestamp}.jsonl"))
-    agent_logger.add_output(LogOutput.file(log_path, level=LogLevel.DEBUG, format="jsonl"))
+        log_path = os.path.realpath(
+            os.path.join("/var/log", f"watchcat_{timestamp}.jsonl")
+        )
+    agent_logger.add_output(
+        LogOutput.file(log_path, level=LogLevel.DEBUG, format="jsonl")
+    )
 
     agent = Agent()
     config[agent].load("watchcat.config.toml", "watchcat.env.toml")
