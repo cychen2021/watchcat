@@ -63,6 +63,7 @@ class Agent:
     @model.setter
     def set_model(self, value):
         # FIXME: The descriptor may not be able to access private attributes.
+        #  We need to validate whether this is the case.
         if not hasattr(self, "__model"):
             self.__model = ModelInfo(generation_model=value, embedding_model=None)
         else:
