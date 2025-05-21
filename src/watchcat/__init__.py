@@ -1,12 +1,16 @@
 from phdkit.log import LogOutput, EmailNotifier
 from phdkit.configlib import config
+import click
 from .agent import Agent, logger as agent_logger
 
 
-def main() -> None:
-    email_notifier = EmailNotifier()
-    config[email_notifier].load("watchcat.config.toml", "watchcat.env.toml")
-    agent_logger.add_output(LogOutput.email(email_notifier))
+@click.command()
+@click.option("--debug", is_flag=True, help="Enable debug mode.", default=True)
+def main(debug: bool) -> None:
+    if not debug:
+        email_notifier = EmailNotifier()
+        config[email_notifier].load("watchcat.config.toml", "watchcat.env.toml")
+        agent_logger.add_output(LogOutput.email(email_notifier))
 
     agent = Agent()
     config[agent].load("watchcat.config.toml", "watchcat.env.toml")
