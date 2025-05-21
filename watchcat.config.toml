@@ -3,8 +3,8 @@ model = "gemini-2.5-flash"
 embedding_model = "gemini-embedding-exp-03-07"
 gemini_base_url = "https://generativelanguage.googleapis.com"
 topic = """\
-        I'm interested in any paper related to C to Rust translation, especially about translation to *safe* Rust. \
-        LLMs may be a good tool for this purpose.\
-        """
+    I'm interested in any paper related to C to Rust translation, especially about translation to *safe* Rust. \
+    LLMs may be a good tool for this purpose.\
+"""
 keywords = ["c to rust", "c2rust", "c to safe rust"]
 relevance_threshold = 0.5
