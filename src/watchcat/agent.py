@@ -62,14 +62,14 @@ class Agent:
 
     @model.setter
     def set_model(self, value):
-        if self.__model is None:
+        if not hasattr(self, "__model"):
             self.__model = ModelInfo(generation_model=value, embedding_model=None)
         else:
             self.__model.generation_model = value
 
     @setting.getter("embedding_model")
     def embedding_model(self) -> str | None:
-        if self.__model is None:
+        if not hasattr(self, "__model"):
             return None
         return self.__model.embedding_model
 
