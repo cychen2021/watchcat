@@ -25,9 +25,6 @@ watchcat = "watchcat:main"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.uv.sources]
-phdkit = { workspace = true }
-
 [dependency-groups]
 dev = [
     "black>=25.1.0",
