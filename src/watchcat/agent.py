@@ -62,25 +62,15 @@ class Agent:
 
     @model.setter
     def set_model(self, value):
-        # FIXME: The descriptor may not be able to access private attributes.
-        #  We need to validate whether this is the case.
-        if not hasattr(self, "__model"):
-            self.__model = ModelInfo(generation_model=value, embedding_model=None)
-        else:
-            self.__model.generation_model = value
+        self.__model.generation_model = value
 
     @setting.getter("embedding_model")
     def embedding_model(self) -> str | None:
-        if not hasattr(self, "__model"):
-            return None
         return self.__model.embedding_model
 
     @embedding_model.setter
     def set_embedding_model(self, value):
-        embedding_model_updated = value != self.__model.embedding_model
         self.__model.embedding_model = value
-        if embedding_model_updated:
-            self.update_topic_embedding()
 
     @setting.getter("gemini_api_key")
     def gemini_api_key(self) -> str | None:
@@ -118,10 +108,7 @@ class Agent:
 
     @topic.setter
     def set_topic(self, topic: str | None):
-        topic_updated = topic != self.__topic
         self.__topic = topic
-        if topic_updated:
-            self.update_topic_embedding()
 
     @setting("keywords")
     def keywords(self) -> list[str]: ...
@@ -130,8 +117,6 @@ class Agent:
     def relevance_threshold(self) -> float: ...
 
     def __init__(self):
-        self.model = None
-
         self.__model: ModelInfo = ModelInfo(generation_model=None, embedding_model=None)
         self.__provider_info: dict[str, ProviderInfo] = {}
 
@@ -142,11 +127,18 @@ class Agent:
 
         self.__relevance_threshold: float = 0.7
 
+    def init(self):
+        self.update_topic_embedding()
+
     def __get_embedding(self, text: str) -> list[float]:
         match self.embedding_model:
             case "gemini-embedding-exp-03-07":
                 api_base = self.gemini_base_url
                 api_key = self.gemini_api_key
+            case _:
+                raise ValueError(
+                    f"Unsupported embedding model: {self.embedding_model}"
+                )
         response = embedding(
             model=self.embedding_model,
             input=[text],
@@ -168,11 +160,11 @@ class Agent:
         return response.data
 
     def update_topic_embedding(self):
-        if self.topic is None:
+        if self.__topic is None:
             raise ValueError("Topic is not set")
-        if self.embedding_model is None:
+        if self.__model.embedding_model is None:
             raise ValueError("Embedding model is not set")
-        self.__topic_embedding = self.__get_embedding(self.topic)
+        self.__topic_embedding = self.__get_embedding(self.__topic)
 
     @staticmethod
     def compare_embeddings(embedding1: list[float], embedding2: list[float]) -> float:
