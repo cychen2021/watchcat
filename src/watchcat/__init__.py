@@ -27,7 +27,7 @@ def main(develop: bool) -> None:
         )
     else:
         log_path = os.path.realpath(
-            os.path.join(xdg.xdg_state_home() , f"watchcat_{timestamp}.jsonl")
+            os.path.join(xdg.xdg_state_home(), f"watchcat_{timestamp}.jsonl")
         )
     agent_logger.add_output(
         LogOutput.file(log_path, level=LogLevel.DEBUG, format="jsonl")
