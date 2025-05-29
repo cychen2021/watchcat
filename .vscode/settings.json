@@ -6,7 +6,7 @@
   ],
   "github.copilot.chat.codeGeneration.instructions": [
     {
-    "file": ".github/instructions/guidelines.instructions.md"
+      "file": ".github/instructions/guidelines.instructions.md"
     },
     {
       "file": ".github/instructions/project-structure.instructions.md"
