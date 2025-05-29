@@ -34,7 +34,7 @@ def main(develop: bool) -> None:
     )
 
     agent = Agent()
-    config[agent].load("watchcat.config.toml", "watchcat.env.toml")
+    config[agent].load("watchcat/watchcat.config.toml", "watchcat/watchcat.env.toml")
 
     papers = agent.fetch_papers()
     for paper in papers:
