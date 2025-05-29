@@ -1,7 +1,6 @@
 [agent]
-model = "gemini-2.5-flash"
-embedding_model = "gemini-embedding-exp-03-07"
-gemini_base_url = "https://generativelanguage.googleapis.com"
+model = "gemini/gemini-2.5-flash"
+embedding_model = "gemini/gemini-embedding-exp-03-07"
 topic = """\
     I'm interested in any paper related to C to Rust translation, especially about translation to *safe* Rust. \
     LLMs may be a good tool for this purpose.\

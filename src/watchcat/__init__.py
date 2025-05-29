@@ -18,7 +18,9 @@ def main(develop: bool) -> None:
         email_notifier = EmailNotifier()
         config[email_notifier].load("watchcat/watchcat.config.toml", "watchcat/watchcat.env.toml")
         agent_logger.add_output(LogOutput.email(email_notifier, level=LogLevel.WARNING))
-    agent_logger.add_output(LogOutput.stderr())
+        agent_logger.add_output(LogOutput.stderr())
+    else:
+        agent_logger.add_output(LogOutput.stderr(level=LogLevel.DEBUG))
     if platform.system() == "Windows":
         appdata = os.getenv("LOCALAPPDATA")
         assert appdata is not None, "LOCALAPPDATA is not set"
@@ -39,4 +41,5 @@ def main(develop: bool) -> None:
 
     papers = agent.fetch_papers()
     for paper in papers:
-        agent.worth_reading(paper)
+        worth = agent.worth_reading(paper)
+        print(f"Paper {paper.id} worth reading: {worth}")

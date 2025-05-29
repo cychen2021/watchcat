@@ -10,10 +10,10 @@ from arxiv import (
 )
 from datetime import datetime, UTC
 from litellm import embedding
+from litellm.types.utils import Embedding
 from .paper import ArxivPaper
 
-logger = Logger(__file__)
-
+logger = Logger(__file__, outputs=None)
 
 def __read_config(config_file: str | None = None):
     with open(config_file if config_file is not None else "config.toml", "rb") as f:
@@ -38,8 +38,7 @@ def __read_env(config_file: str | None = None):
 
 @dataclass
 class ProviderInfo:
-    base_url: str | None
-
+    pass
 
 @dataclass
 class GeminiProviderInfo(ProviderInfo):
@@ -82,25 +81,10 @@ class Agent:
     def set_gemini_api_key(self, value):
         if "gemini" not in self.__provider_info:
             self.__provider_info["gemini"] = GeminiProviderInfo(
-                api_key=value, base_url=None
+                api_key=value
             )
         else:
             self.__provider_info["gemini"].api_key = value  # type: ignore
-
-    @setting.getter("gemini_base_url")
-    def gemini_base_url(self) -> str | None:
-        if "gemini" not in self.__provider_info:
-            return None
-        return self.__provider_info["gemini"].base_url
-
-    @gemini_base_url.setter
-    def set_gemini_base_url(self, value):
-        if "gemini" not in self.__provider_info:
-            self.__provider_info["gemini"] = GeminiProviderInfo(
-                api_key=None, base_url=value
-            )
-        else:
-            self.__provider_info["gemini"].base_url = value
 
     @setting.getter("topic")
     def topic(self) -> str | None:
@@ -132,8 +116,7 @@ class Agent:
 
     def __get_embedding(self, text: str) -> list[float]:
         match self.embedding_model:
-            case "gemini-embedding-exp-03-07":
-                api_base = self.gemini_base_url
+            case "gemini/gemini-embedding-exp-03-07":
                 api_key = self.gemini_api_key
             case _:
                 raise ValueError(
@@ -142,7 +125,6 @@ class Agent:
         response = embedding(
             model=self.embedding_model,
             input=[text],
-            api_base=api_base,
             api_key=api_key,
         )
         from litellm.types.utils import EmbeddingResponse
@@ -154,10 +136,15 @@ class Agent:
             response.data, list
         ), f"Expected list, got {type(response.data)}"
         if response.data:
+            assert len(response.data) == 1, "Expected exactly one embedding"
+            embedding_data = response.data[0]
+            assert isinstance(embedding_data, Embedding), f"Expected Embedding, got {type(embedding_data)}"
             assert isinstance(
-                response.data[0], float
-            ), f"Expected float, got {type(response.data[0])}"
-        return response.data
+                embedding_data.embedding, list
+            ), f"Expected list, got {type(embedding_data.embedding)}"
+            return embedding_data.embedding
+        else:
+            raise ValueError("No embedding data returned")
 
     def update_topic_embedding(self):
         if self.__topic is None:
@@ -178,14 +165,15 @@ class Agent:
     def fetch_papers(self) -> Sequence[ArxivPaper]:
         now = datetime.now(UTC)
         today = datetime(now.year, now.month, now.day, 0, 0, 0, tzinfo=UTC)
-        yesterday = datetime(now.year, now.month, now.day - 1, 0, 0, 0, tzinfo=UTC)
-        query = f"({"+OR+".join(self.__keywords)})+AND+submittedDate:[{yesterday.isoformat()}+TO+{today.isoformat()}]"
+        yesterday = datetime(now.year, now.month - 1, now.day - 1, 0, 0, 0, tzinfo=UTC)
+        query = f"({"+OR+".join(f'"{keyword}"' for keyword in self.__keywords)})+AND+submittedDate:[{yesterday.isoformat()}+TO+{today.isoformat()}]"
         search = ArxivSearch(
             query,
             sort_by=ArxivSortCriterion.Relevance,
             max_results=Agent.MAX_PAPERS_PER_DAY,
         )
-        results = self.__arxiv_client.results(search)
+        results = list(self.__arxiv_client.results(search))
+        logger.debug(f"Query {query} returned {len(results)} results", message="\n".join(str(r) for r in results))
         papers = []
         for result in results:
             paper = ArxivPaper(
