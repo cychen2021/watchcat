@@ -6,5 +6,5 @@ topic = """\
     I'm interested in any paper related to C to Rust translation, especially about translation to *safe* Rust. \
     LLMs may be a good tool for this purpose.\
 """
-keywords = ["c to rust", "c2rust", "c to safe rust"]
+keywords = ["c to rust", "c2rust", "c to safe rust", "safer rust", "c to safer rust"]
 relevance_threshold = 0.5
