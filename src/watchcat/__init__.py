@@ -16,7 +16,7 @@ def main(develop: bool) -> None:
     timestamp = datetime.now(UTC).strftime("%Y-%m-%d_%H:%M:%S")
     if not develop:
         email_notifier = EmailNotifier()
-        config[email_notifier].load("watchcat.config.toml", "watchcat.env.toml")
+        config[email_notifier].load("watchcat/watchcat.config.toml", "watchcat/watchcat.env.toml")
         agent_logger.add_output(LogOutput.email(email_notifier, level=LogLevel.WARNING))
     agent_logger.add_output(LogOutput.stderr())
     if platform.system() == "Windows":
