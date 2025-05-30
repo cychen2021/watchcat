@@ -25,6 +25,7 @@ class ArxivClient:
 
     def results(self, search: ArxivSearch) -> Iterator[ArxivPaper]:
         """Fetch papers from arXiv API based on search criteria."""
+
         params = {
             "search_query": search.query,
             "max_results": str(search.max_results),
@@ -49,6 +50,7 @@ class ArxivClient:
 
     def _parse_entry(self, entry: ET.Element, ns: dict) -> ArxivPaper:
         """Parse a single arXiv entry into an ArxivPaper object."""
+
         # Extract basic information
         id_elem = entry.find("atom:id", ns)
         title_elem = entry.find("atom:title", ns)

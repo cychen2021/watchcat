@@ -5,4 +5,4 @@
 - **Dependency Management:** Utilize `uv` and virtual environments.
 - **Preserve Comments:** Existing comments in code must be retained.
 - **Modern Python Features:** Use modern Python features up to 3.12.
-- **Doc Strings**: The doc strings should be in the format of Google style.
+- **Doc Strings**: The doc strings should be in the format of Google style. Always leave a blank line after doc strings.
