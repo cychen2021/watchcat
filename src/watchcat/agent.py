@@ -108,7 +108,7 @@ class Agent:
         self.__arxiv_client: ArxivClient = ArxivClient()
 
         self.__relevance_threshold: float = 0.7
-        
+
         self.embedding = AutoRetry(
             embedding,
             logger,
