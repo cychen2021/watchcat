@@ -1,7 +1,7 @@
 [project]
 name = "watchcat"
 version = "0.0.1"
-description = "Add your description here"
+description = "An AI agent to collect research updates on your interests."
 readme = "README.md"
 authors = [
     { name = "Chuyang Chen", email = "chuyangchen2018@outlook.com" }
