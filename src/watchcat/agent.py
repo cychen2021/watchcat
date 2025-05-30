@@ -3,11 +3,13 @@ from dataclasses import dataclass
 from phdkit.configlib import configurable, setting
 from phdkit.log import Logger
 from typing import Sequence
-from .arxiv import ArxivClient, ArxivSearch, ArxivSortBy
 from datetime import datetime, UTC, timedelta
 from litellm import embedding
 from litellm.types.utils import Embedding
+from litellm.types.utils import EmbeddingResponse
 from .paper import ArxivPaper
+from .autoretry import AutoRetry
+from .arxiv import ArxivClient, ArxivSearch, ArxivSortBy
 
 logger = Logger(__file__, outputs=None)
 
@@ -96,11 +98,6 @@ class Agent:
     @setting("relevance_threshold")
     def relevance_threshold(self) -> float: ...
 
-    @staticmethod
-    def __extract_provider(model: str) -> str:
-        tokens = model.split("/")
-        return tokens[0] if len(tokens) > 1 else ""
-
     def __init__(self):
         self.__model: ModelInfo = ModelInfo(generation_model=None, embedding_model=None)
         self.__provider_info: dict[str, ProviderInfo] = {}
@@ -111,6 +108,14 @@ class Agent:
         self.__arxiv_client: ArxivClient = ArxivClient()
 
         self.__relevance_threshold: float = 0.7
+        
+        self.embedding = AutoRetry(
+            embedding,
+            logger,
+            max_retrys=5,
+            increment_factor=2,
+            decrement_num=10,
+        )
 
     def init(self):
         self.update_topic_embedding()
@@ -121,12 +126,11 @@ class Agent:
                 api_key = self.gemini_api_key
             case _:
                 raise ValueError(f"Unsupported embedding model: {self.embedding_model}")
-        response = embedding(
+        response = self.embedding(
             model=self.embedding_model,
             input=[text],
             api_key=api_key,
         )
-        from litellm.types.utils import EmbeddingResponse
 
         assert isinstance(
             response, EmbeddingResponse

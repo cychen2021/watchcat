@@ -19,7 +19,6 @@ class ArxivSearch:
     sort_by: ArxivSortBy = ArxivSortBy.RELEVANCE
     ascending: bool = False
 
-
 class ArxivClient:
     URL = "http://export.arxiv.org/api/query"
 
