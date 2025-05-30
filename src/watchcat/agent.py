@@ -3,12 +3,8 @@ from dataclasses import dataclass
 from phdkit.configlib import configurable, setting
 from phdkit.log import Logger
 from typing import Sequence
-from arxiv import (
-    Client as ArxivClient,
-    Search as ArxivSearch,
-    SortCriterion as ArxivSortCriterion,
-)
-from datetime import datetime, UTC
+from .arxiv import ArxivClient, ArxivSearch, ArxivSortBy
+from datetime import datetime, UTC, timedelta
 from litellm import embedding
 from litellm.types.utils import Embedding
 from .paper import ArxivPaper
@@ -167,32 +163,35 @@ class Agent:
         norm2 = sum(b**2 for b in embedding2) ** 0.5
         return dot_product / (norm1 * norm2) if norm1 and norm2 else 0.0
 
+    @staticmethod
+    def __arxiv_api_dateformat(date: datetime) -> str:
+        return date.strftime("%Y%m%d%H%M")
+
     def fetch_papers(self) -> Sequence[ArxivPaper]:
         now = datetime.now(UTC)
-        today = datetime(now.year, now.month, now.day, 0, 0, 0, tzinfo=UTC)
-        yesterday = datetime(now.year, now.month - 1, now.day - 1, 0, 0, 0, tzinfo=UTC)
-        query = f"({"+OR+".join(f'"{keyword}"' for keyword in self.__keywords)})+AND+submittedDate:[{yesterday.isoformat()}+TO+{today.isoformat()}]"
+        today = datetime(now.year, now.month, now.day, 6, 0, 0, tzinfo=UTC)
+        yesterday = today - timedelta(days=30)
+
+        keyword_query = " OR ".join(f'"{keyword}"' for keyword in self.__keywords)
+        date_query = f"submittedDate:[{self.__arxiv_api_dateformat(yesterday)} TO {self.__arxiv_api_dateformat(today)}]"
+
+        if keyword_query:
+            full_query = f"({keyword_query}) AND {date_query}"
+        else:
+            full_query = date_query
+
         search = ArxivSearch(
-            query,
-            sort_by=ArxivSortCriterion.Relevance,
-            max_results=Agent.MAX_PAPERS_PER_DAY,
+            query=full_query,
+            max_results=self.MAX_PAPERS_PER_DAY,
+            sort_by=ArxivSortBy.RELEVANCE,
+            ascending=False,
         )
         results = list(self.__arxiv_client.results(search))
         logger.debug(
-            f"Query {query} returned {len(results)} results",
+            f"Query {full_query} returned {len(results)} results",
             message="\n".join(str(r) for r in results),
         )
-        papers = []
-        for result in results:
-            paper = ArxivPaper(
-                id=result.entry_id,
-                title=result.title,
-                authors=[author.name for author in result.authors],
-                summary=result.summary,
-                url=result.entry_id,
-            )
-            papers.append(paper)
-        return papers
+        return results
 
     def worth_reading(self, paper: ArxivPaper) -> bool:
         logger.info("Checking worthiness of paper", f"Paper {paper.id} ({paper.title})")
@@ -214,4 +213,4 @@ class Agent:
     def get_paper_embedding(self, paper: ArxivPaper) -> list[float]:
         if self.embedding_model is None:
             raise ValueError("Embedding model is not set")
-        return self.__get_embedding(paper.summary)
+        return self.__get_embedding(paper.abstract)

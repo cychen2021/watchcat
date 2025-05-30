@@ -8,7 +8,6 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "arxiv>=2.2.0",
     "click>=8.2.1",
     "litellm>=1.71.2",
     "phdkit",
