@@ -9,6 +9,10 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "click>=8.2.1",
+    "google-api-python-client>=2.170.0",
+    "google-auth-httplib2>=0.2.0",
+    "google-auth-oauthlib>=1.2.2",
+    "google-cloud-storage>=3.1.0",
     "litellm>=1.71.2",
     "phdkit",
     "sqlite-vec>=0.1.6",
