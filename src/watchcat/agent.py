@@ -7,8 +7,8 @@ from datetime import datetime, UTC, timedelta
 from litellm import embedding
 from litellm.types.utils import Embedding
 from litellm.types.utils import EmbeddingResponse
+from phdkit.autoretry import AutoRetry
 from .paper import ArxivPaper
-from .autoretry import AutoRetry
 from .arxiv import ArxivClient, ArxivSearch, ArxivSortBy
 
 logger = Logger(__file__, outputs=None)
