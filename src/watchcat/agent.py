@@ -100,6 +100,11 @@ class Agent:
     @setting("relevance_threshold")
     def relevance_threshold(self) -> float: ...
 
+    @staticmethod
+    def __extract_provider(model: str) -> str:
+        tokens = model.split("/")
+        return tokens[0] if len(tokens) > 1 else ""
+
     def __init__(self):
         self.__model: ModelInfo = ModelInfo(generation_model=None, embedding_model=None)
         self.__provider_info: dict[str, ProviderInfo] = {}
