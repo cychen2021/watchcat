@@ -274,3 +274,4 @@ $RECYCLE.BIN/
 tmp/
 x_*
 *.env.toml
+.python-version
