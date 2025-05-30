@@ -5,8 +5,10 @@ import platform
 import os
 import xdg_base_dirs as xdg
 from datetime import datetime, UTC
+import litellm
 from .agent import Agent, logger as agent_logger
 
+litellm.suppress_debug_info = True
 
 @click.command()
 @click.option(
