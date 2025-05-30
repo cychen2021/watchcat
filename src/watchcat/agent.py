@@ -15,6 +15,7 @@ from .paper import ArxivPaper
 
 logger = Logger(__file__, outputs=None)
 
+
 def __read_config(config_file: str | None = None):
     with open(config_file if config_file is not None else "config.toml", "rb") as f:
         config = tomllib.load(f)
@@ -39,6 +40,7 @@ def __read_env(config_file: str | None = None):
 @dataclass
 class ProviderInfo:
     pass
+
 
 @dataclass
 class GeminiProviderInfo(ProviderInfo):
@@ -80,9 +82,7 @@ class Agent:
     @gemini_api_key.setter
     def set_gemini_api_key(self, value):
         if "gemini" not in self.__provider_info:
-            self.__provider_info["gemini"] = GeminiProviderInfo(
-                api_key=value
-            )
+            self.__provider_info["gemini"] = GeminiProviderInfo(api_key=value)
         else:
             self.__provider_info["gemini"].api_key = value  # type: ignore
 
@@ -124,9 +124,7 @@ class Agent:
             case "gemini/gemini-embedding-exp-03-07":
                 api_key = self.gemini_api_key
             case _:
-                raise ValueError(
-                    f"Unsupported embedding model: {self.embedding_model}"
-                )
+                raise ValueError(f"Unsupported embedding model: {self.embedding_model}")
         response = embedding(
             model=self.embedding_model,
             input=[text],
@@ -143,7 +141,9 @@ class Agent:
         if response.data:
             assert len(response.data) == 1, "Expected exactly one embedding"
             embedding_data = response.data[0]
-            assert isinstance(embedding_data, Embedding), f"Expected Embedding, got {type(embedding_data)}"
+            assert isinstance(
+                embedding_data, Embedding
+            ), f"Expected Embedding, got {type(embedding_data)}"
             assert isinstance(
                 embedding_data.embedding, list
             ), f"Expected list, got {type(embedding_data.embedding)}"
@@ -178,7 +178,10 @@ class Agent:
             max_results=Agent.MAX_PAPERS_PER_DAY,
         )
         results = list(self.__arxiv_client.results(search))
-        logger.debug(f"Query {query} returned {len(results)} results", message="\n".join(str(r) for r in results))
+        logger.debug(
+            f"Query {query} returned {len(results)} results",
+            message="\n".join(str(r) for r in results),
+        )
         papers = []
         for result in results:
             paper = ArxivPaper(
