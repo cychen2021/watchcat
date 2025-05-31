@@ -49,7 +49,7 @@ class ArxivPaper(Post):
             |)
             |---
             |{self.abstract}""",
-            keep_last_newline=True,
+            keep_last_ws=True,
         )
 
     @override

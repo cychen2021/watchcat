@@ -16,7 +16,7 @@ def unimplemented(message: str | None = None) -> None:
         raise UnimplementedError(message)
 
 
-def strip_indent(text: str, *, keep_last_newline: bool = False) -> str:
+def strip_indent(text: str, *, keep_last_ws: bool = False) -> str:
     lines = text.strip().splitlines()
     if not lines:
         return ""
@@ -31,15 +31,11 @@ def strip_indent(text: str, *, keep_last_newline: bool = False) -> str:
         else:
             new_line = line
         new_lines.append(new_line)
-    content = "\n".join(new_lines).strip()
-    if (
-        keep_last_newline
-        and text
-        and text[-1] == "\n"
-        and content
-        and content[-1] != "\n"
-    ):
-        content += "\n"
+    if keep_last_ws:
+        content = "\n".join(new_lines).lstrip()
+        content += text[: len(content) - len(text.lstrip())]
+    else:
+        content = "\n".join(new_lines).strip()
     return content
 
 
