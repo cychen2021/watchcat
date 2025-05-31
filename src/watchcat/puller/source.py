@@ -30,7 +30,10 @@ class SourceFilter(Protocol):
 
 
 class Source(Protocol):
-    """An information source that can be pulled."""
+    """An information source that can be pulled.
+
+    Note that any class that implements a source should be configurable.
+    """
 
     id: str
     kind: SourceKind
