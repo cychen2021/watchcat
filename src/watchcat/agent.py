@@ -13,8 +13,6 @@ from .arxiv import ArxivClient, ArxivSearch, ArxivSortBy
 
 __all__ = ["Agent", "ProviderInfo", "GeminiProviderInfo", "ModelInfo"]
 
-logger = Logger(__file__, outputs=None)
-
 
 def __read_config(config_file: str | None = None):
     with open(config_file if config_file is not None else "config.toml", "rb") as f:
@@ -111,9 +109,11 @@ class Agent:
 
         self.__relevance_threshold: float = 0.7
 
+        self.logger = Logger(f"Agent#{id(self)}", outputs=None)
+
         self.embedding = AutoRetry(
             embedding,
-            logger,
+            self.logger,
             max_retrys=5,
             increment_factor=2,
             decrement_num=10,
@@ -193,14 +193,14 @@ class Agent:
             ascending=False,
         )
         results = list(self.__arxiv_client.results(search))
-        logger.debug(
+        self.logger.debug(
             f"Query {full_query} returned {len(results)} results",
             message="\n".join(str(r) for r in results),
         )
         return results
 
     def worth_reading(self, paper: ArxivPaper) -> bool:
-        logger.info("Checking worthiness of paper", f"Paper {paper.id} ({paper.title})")
+        self.logger.info("Checking worthiness of paper", f"Paper {paper.id} ({paper.title})")
         topic_embedding = self.__topic_embedding
         if topic_embedding is None:
             raise ValueError("Topic embedding is not set")
@@ -209,7 +209,7 @@ class Agent:
         worth = relevance >= self.__relevance_threshold
 
         if worth:
-            logger.info(
+            self.logger.info(
                 "Worth reading paper",
                 f"Paper {paper.id} is worth reading (relevance: {relevance})",
             )
