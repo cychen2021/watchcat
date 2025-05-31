@@ -6,3 +6,9 @@
 - **Preserve Comments:** Existing comments in code must be retained.
 - **Modern Python Features:** Use modern Python features up to 3.12.
 - **Doc Strings**: The doc strings should be in the format of Google style. Always leave a blank line after doc strings.
+- **Miscellaneous**
+    1. Use `is` for identity checks and `==` for equality checks.
+    2. Use f-strings for string formatting.
+    3. Use `with` statements for file operations.
+    4. Use list comprehensions where appropriate.
+    5. Use double quotes for strings.
