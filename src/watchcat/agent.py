@@ -200,7 +200,9 @@ class Agent:
         return results
 
     def worth_reading(self, paper: ArxivPaper) -> bool:
-        self.logger.info("Checking worthiness of paper", f"Paper {paper.id} ({paper.title})")
+        self.logger.info(
+            "Checking worthiness of paper", f"Paper {paper.id} ({paper.title})"
+        )
         topic_embedding = self.__topic_embedding
         if topic_embedding is None:
             raise ValueError("Topic embedding is not set")

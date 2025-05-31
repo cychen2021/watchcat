@@ -2,10 +2,12 @@ from enum import Enum
 from typing import Protocol, Sequence, Collection
 from .post import Post
 
+
 class SourceKind(Enum):
     ARXIV = "arxiv"
     ZULIP = "zulip"
     MAIL = "mail"
+
 
 class SourceFilter(Protocol):
     """A filter for posts pulled from a source."""
@@ -26,11 +28,11 @@ class SourceFilter(Protocol):
         """Invert the filter."""
         ...
 
+
 class Source(Protocol):
     """An information source that can be pulled."""
 
     id: str
     kind: SourceKind
 
-    def pull(self, *filters: SourceFilter) -> Sequence[Post]:
-        ...
+    def pull(self, *filters: SourceFilter) -> Sequence[Post]: ...

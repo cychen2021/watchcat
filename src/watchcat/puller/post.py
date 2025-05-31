@@ -1,6 +1,7 @@
 from typing import Protocol, Collection
 from datetime import datetime
 
+
 class Post(Protocol):
     """A post pulled from a source.
 
