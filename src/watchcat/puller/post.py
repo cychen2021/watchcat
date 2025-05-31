@@ -15,8 +15,7 @@ class Post(Protocol):
     pulled_date: datetime
     source: str  # Identifier for the source from which the post was pulled
 
-    def __str__(self) -> str:
-        ...
+    def __str__(self) -> str: ...
 
     def serializable_content(self) -> object:
         """Return a serializable representation of the post content.
@@ -27,6 +26,8 @@ class Post(Protocol):
         """
         ...
 
-    def summarize_embedding(self, compute_embedding: Callable[..., list[float]]) -> list[float]:
+    def summarize_embedding(
+        self, compute_embedding: Callable[..., list[float]]
+    ) -> list[float]:
         """Generate an embedding that summarizes the post content using the provided embedding function."""
         ...
