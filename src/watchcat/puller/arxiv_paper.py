@@ -59,4 +59,5 @@ class ArxivPaper(Post):
     def from_serializable_object(self, obj: object) -> None: ...
 
     @override
-    def summarize_embedding(self, compute_embedding) -> list[float]: ...
+    def summarize_embedding(self, compute_embedding) -> list[float]:
+        return compute_embedding(self.abstract)
