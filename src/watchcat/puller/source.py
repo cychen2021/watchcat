@@ -4,6 +4,7 @@ from abc import abstractmethod
 from .post import Post
 from ..util import unimplemented
 
+__all__ = ["SourceKind", "SourceFilter", "Source"]
 
 class SourceKind(Enum):
     ARXIV = "arxiv"

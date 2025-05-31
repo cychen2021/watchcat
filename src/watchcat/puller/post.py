@@ -4,6 +4,8 @@ from abc import abstractmethod
 from ..util import unimplemented
 
 
+__all__ = ["Post"]
+
 class Post(Protocol):
     """A post pulled from a source.
 
@@ -22,12 +24,20 @@ class Post(Protocol):
         unimplemented()
 
     @abstractmethod
-    def serializable_content(self) -> object:
+    def serializable_object(self) -> object:
         """Return a serializable representation of the post content.
 
         Typically, it will be a recursive dictionary/list/primitive structure that can be easily
         serialized to JSON or similar formats. This method will be used for storing the post in a
         database or sending it over a network.
+        """
+        unimplemented()
+
+    @abstractmethod
+    def from_serializable_object(self, obj: object) -> None:
+        """Populate the post content from a serializable representation.
+
+        This method will be used for loading the post from a database or receiving it over a network.
         """
         unimplemented()
 
