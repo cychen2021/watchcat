@@ -28,7 +28,7 @@ class Post(Protocol):
     def serializable_object(self) -> object:
         """Return a serializable representation of the post content.
 
-        Typically, it will be a recursive dictionary/list/primitive structure that can be easily
+        Typically, it will be a recursive dictionary/list/primitive object that can be easily
         serialized to JSON or similar formats. This method will be used for storing the post in a
         database or sending it over a network.
         """
