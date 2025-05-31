@@ -18,7 +18,8 @@ class Post(Protocol):
     source: str  # Identifier for the source from which the post was pulled
 
     @abstractmethod
-    def __str__(self) -> str: unimplemented()
+    def __str__(self) -> str:
+        unimplemented()
 
     @abstractmethod
     def serializable_content(self) -> object:

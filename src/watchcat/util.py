@@ -1,5 +1,6 @@
 __all__ = ["UnimplementedError", "unimplemented"]
 
+
 class UnimplementedError(Exception):
     def __init__(self, message: str = "This feature is not implemented yet."):
         self.message = message
@@ -7,11 +8,13 @@ class UnimplementedError(Exception):
     def __str__(self):
         return f"Unimplemented Error: {self.message}"
 
+
 def unimplemented(message: str | None = None) -> None:
     if message is None:
         raise UnimplementedError()
     else:
         raise UnimplementedError(message)
+
 
 def strip_indent(text: str, keep_last_newline: bool = False) -> str:
     lines = text.strip().splitlines()
@@ -29,6 +32,12 @@ def strip_indent(text: str, keep_last_newline: bool = False) -> str:
             new_line = line
         new_lines.append(new_line)
     content = "\n".join(new_lines).strip()
-    if keep_last_newline and text and text[-1] == "\n" and content and content[-1] != "\n":
+    if (
+        keep_last_newline
+        and text
+        and text[-1] == "\n"
+        and content
+        and content[-1] != "\n"
+    ):
         content += "\n"
     return content
