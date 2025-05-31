@@ -1,4 +1,4 @@
-from typing import Protocol, Collection
+from typing import Protocol, Collection, Callable
 from datetime import datetime
 
 
@@ -18,5 +18,15 @@ class Post(Protocol):
     def __str__(self) -> str:
         ...
 
-    def serializable_content(self) -> dict:
+    def serializable_content(self) -> object:
+        """Return a serializable representation of the post content.
+
+        Typically, it will be a recursive dictionary/list/primitive structure that can be easily
+        serialized to JSON or similar formats. This method will be used for storing the post in a
+        database or sending it over a network.
+        """
+        ...
+
+    def summarize_embedding(self, compute_embedding: Callable[..., list[float]]) -> list[float]:
+        """Generate an embedding that summarizes the post content using the provided embedding function."""
         ...
