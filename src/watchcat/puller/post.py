@@ -6,6 +6,7 @@ from ..util import unimplemented
 
 __all__ = ["Post"]
 
+
 class Post(Protocol):
     """A post pulled from a source.
 

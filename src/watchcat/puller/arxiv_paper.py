@@ -6,6 +6,7 @@ from ..util import strip_indent
 
 __all__ = ["ArxivPaper"]
 
+
 class ArxivPaper(Post):
     def __init__(
         self,
@@ -52,13 +53,10 @@ class ArxivPaper(Post):
         )
 
     @override
-    def serializable_object(self) -> object:
-        ...
+    def serializable_object(self) -> object: ...
 
     @override
-    def from_serializable_object(self, obj: object) -> None:
-        ...
+    def from_serializable_object(self, obj: object) -> None: ...
 
     @override
-    def summarize_embedding(self, compute_embedding) -> list[float]:
-        ...
+    def summarize_embedding(self, compute_embedding) -> list[float]: ...
