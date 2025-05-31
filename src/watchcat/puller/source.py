@@ -1,6 +1,8 @@
 from enum import Enum
-from typing import Protocol, Sequence, Collection
+from typing import Protocol, Sequence
+from abc import abstractmethod
 from .post import Post
+from ..util import unimplemented
 
 
 class SourceKind(Enum):
@@ -12,21 +14,25 @@ class SourceKind(Enum):
 class SourceFilter(Protocol):
     """A filter for posts pulled from a source."""
 
+    @abstractmethod
     def __call__(self, post: Post) -> bool:
         """Check if a post matches the filter criteria."""
-        ...
+        unimplemented()
 
+    @abstractmethod
     def __and__(self, other: "SourceFilter") -> "SourceFilter":
         """Combine two filters with a logical AND."""
-        ...
+        unimplemented()
 
+    @abstractmethod
     def __or__(self, other: "SourceFilter") -> "SourceFilter":
         """Combine two filters with a logical OR."""
-        ...
+        unimplemented()
 
+    @abstractmethod
     def __invert__(self) -> "SourceFilter":
         """Invert the filter."""
-        ...
+        unimplemented()
 
 
 class Source(Protocol):
@@ -38,4 +44,10 @@ class Source(Protocol):
     id: str
     kind: SourceKind
 
-    def pull(self, *filters: SourceFilter) -> Sequence[Post]: ...
+    @abstractmethod
+    def pull(self, *filters: SourceFilter) -> Sequence[Post]:
+        """Pull posts from the source, optionally filtered by the provided filters.
+
+        Returns a sequence of posts that match the filters, possibly ordered.
+        """
+        unimplemented()

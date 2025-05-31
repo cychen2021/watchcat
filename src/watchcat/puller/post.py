@@ -1,5 +1,7 @@
 from typing import Protocol, Collection, Callable
 from datetime import datetime
+from abc import abstractmethod
+from ..util import unimplemented
 
 
 class Post(Protocol):
@@ -15,8 +17,10 @@ class Post(Protocol):
     pulled_date: datetime
     source: str  # Identifier for the source from which the post was pulled
 
-    def __str__(self) -> str: ...
+    @abstractmethod
+    def __str__(self) -> str: unimplemented()
 
+    @abstractmethod
     def serializable_content(self) -> object:
         """Return a serializable representation of the post content.
 
@@ -24,10 +28,11 @@ class Post(Protocol):
         serialized to JSON or similar formats. This method will be used for storing the post in a
         database or sending it over a network.
         """
-        ...
+        unimplemented()
 
+    @abstractmethod
     def summarize_embedding(
         self, compute_embedding: Callable[..., list[float]]
     ) -> list[float]:
         """Generate an embedding that summarizes the post content using the provided embedding function."""
-        ...
+        unimplemented()
