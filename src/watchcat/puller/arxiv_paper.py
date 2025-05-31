@@ -48,8 +48,8 @@ class ArxivPaper(Post):
             |    abstract={self.abstract}
             |)
             |---
-            |{self.abstract}
-        """
+            |{self.abstract}""",
+            keep_last_newline=True,
         )
 
     @override
