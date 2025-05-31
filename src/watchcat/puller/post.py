@@ -44,7 +44,7 @@ class Post(Protocol):
 
     @abstractmethod
     def summarize_embedding(
-        self, compute_embedding: Callable[..., list[float]]
+        self, compute_embedding: Callable[[str], list[float]]
     ) -> list[float]:
         """Generate an embedding that summarizes the post content using the provided embedding function."""
         unimplemented()
