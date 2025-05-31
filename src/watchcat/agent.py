@@ -11,6 +11,8 @@ from phdkit.autoretry import AutoRetry
 from .paper import ArxivPaper
 from .arxiv import ArxivClient, ArxivSearch, ArxivSortBy
 
+__all__ = ["Agent", "ProviderInfo", "GeminiProviderInfo", "ModelInfo"]
+
 logger = Logger(__file__, outputs=None)
 
 
