@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Sequence, override
 from .post import Post
-from ..util import strip_indent
+from ..util import strip_indent, protect_indent
 
 
 __all__ = ["ArxivPaper"]
@@ -45,7 +45,7 @@ class ArxivPaper(Post):
             |    publish_date={self.publish_date},
             |    pull_date={self.pull_date},
             |    source={self.source},
-            |    abstract={self.abstract}
+            |    abstract={protect_indent(self.abstract)}
             |)
             |---
             |{self.abstract}""",
