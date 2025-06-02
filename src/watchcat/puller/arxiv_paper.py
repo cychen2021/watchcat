@@ -49,7 +49,7 @@ class ArxivPaper(Post):
             |)
             |---
             |{self.abstract}""",
-            keep_last_ws=True,
+            keep_trailing_ws=True,
         )
 
     @override
