@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Sequence, override
 from .post import Post
-from ..util import strip_indent, protect_indent
+from phdkit import strip_indent, protect_indent
 
 
 __all__ = ["ArxivPaper"]

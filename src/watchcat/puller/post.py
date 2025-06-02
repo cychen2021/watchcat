@@ -1,7 +1,7 @@
 from typing import Protocol, Collection, Callable
 from datetime import datetime
 from abc import abstractmethod
-from ..util import unimplemented
+from phdkit import unimplemented
 
 
 __all__ = ["Post"]
