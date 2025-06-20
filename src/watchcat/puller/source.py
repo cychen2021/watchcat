@@ -50,6 +50,11 @@ class Source(Protocol):
     def pull(self, *filters: SourceFilter) -> Sequence[Post]:
         """Pull posts from the source, optionally filtered by the provided filters.
 
-        Returns a sequence of posts that match the filters, possibly ordered.
+        Returns a sequence of posts that match all the filters, possibly ordered.
+
+        Args:
+            *filters: Optional filters to apply to the pulled posts. The filters are applied in conjunction,
+                      meaning that only posts that match all filters will be returned. `Source` should pull
+                      all available posts if no filters are provided.
         """
         unimplemented()
