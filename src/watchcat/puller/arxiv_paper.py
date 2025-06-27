@@ -16,19 +16,29 @@ class ArxivPaper(Post):
         paper_url: str,
         publish_date: datetime,
         abstract: str,
-        pull_date: datetime | None = None,
+        __pulled_date: datetime | None = None,
         source: str,
     ) -> None:
         self.id = id
         self.url = url
         self.paper_url = paper_url
-        self.publish_date = publish_date
-        if pull_date is None:
+        self.__published_date = publish_date
+        if __pulled_date is None:
             self.pull_date = datetime.now()
         else:
-            self.pull_date = pull_date
+            self.pull_date = __pulled_date
         self.source = source
         self.abstract = abstract
+
+    @property
+    def published_date(self) -> datetime:
+        """Alias for publish_date to match Post protocol."""
+        return self.__published_date
+    
+    @property 
+    def pulled_date(self) -> datetime:
+        """Alias for pull_date to match Post protocol."""
+        return self.pull_date
 
     @property
     @override
@@ -42,7 +52,7 @@ class ArxivPaper(Post):
             |    id={self.id},
             |    url={self.url},
             |    paper_url={self.paper_url},
-            |    publish_date={self.publish_date},
+            |    publish_date={self.__published_date},
             |    pull_date={self.pull_date},
             |    source={self.source},
             |    abstract={protect_indent(self.abstract)}
@@ -58,7 +68,7 @@ class ArxivPaper(Post):
             "id": self.id,
             "url": self.url,
             "paper_url": self.paper_url,
-            "publish_date": self.publish_date.isoformat(),
+            "publish_date": self.__published_date.isoformat(),
             "pull_date": self.pull_date.isoformat(),
             "source": self.source,
             "abstract": self.abstract,
@@ -69,7 +79,7 @@ class ArxivPaper(Post):
         self.id = obj["id"]
         self.url = obj["url"]
         self.paper_url = obj["paper_url"]
-        self.publish_date = datetime.fromisoformat(obj["publish_date"])
+        self.__published_date = datetime.fromisoformat(obj["publish_date"])
         self.pull_date = datetime.fromisoformat(obj["pull_date"])
         self.source = obj["source"]
         self.abstract = obj["abstract"]
