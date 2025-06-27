@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "VisualStudioExptTeam.vscodeintellicode",
+        "njpwerner.autodocstring",
+        "ms-python.python",
+        "KevinRose.vsc-python-indent",
+        "eamodio.gitlens",
+        "Gruntfuggly.todo-tree"
+    ],
+}
