@@ -53,10 +53,26 @@ class ArxivPaper(Post):
         )
 
     @override
-    def serializable_object(self) -> object: ...
+    def serializable_object(self) -> dict[str, str]:
+        return {
+            "id": self.id,
+            "url": self.url,
+            "paper_url": self.paper_url,
+            "publish_date": self.publish_date.isoformat(),
+            "pull_date": self.pull_date.isoformat(),
+            "source": self.source,
+            "abstract": self.abstract,
+        }
 
     @override
-    def from_serializable_object(self, obj: object) -> None: ...
+    def from_serializable_object(self, obj: dict[str, str]) -> None:
+        self.id = obj["id"]
+        self.url = obj["url"]
+        self.paper_url = obj["paper_url"]
+        self.publish_date = datetime.fromisoformat(obj["publish_date"])
+        self.pull_date = datetime.fromisoformat(obj["pull_date"])
+        self.source = obj["source"]
+        self.abstract = obj["abstract"]
 
     @override
     def summarize_embedding(self, compute_embedding) -> list[float]:
