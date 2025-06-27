@@ -21,5 +21,9 @@
     "[ ]",
     "[x]",
     "todo"
-  ]
+  ],
+  "todo-tree.general.tagGroups": {
+    "TODO": ["TODO", "todo"],
+    "BUG": ["BUG", "FIXME"]
+  }
 }
