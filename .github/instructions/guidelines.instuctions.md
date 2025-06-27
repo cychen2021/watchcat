@@ -13,3 +13,4 @@
     4. Use list comprehensions where appropriate.
     5. Use double quotes for strings.
     6. Use `is None` and `is not None` for `None` checks.
+    7. There is no need to write tests right after you implement a feature. The tests will be added manually later.
