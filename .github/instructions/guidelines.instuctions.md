@@ -12,3 +12,4 @@
     3. Use `with` statements for file operations.
     4. Use list comprehensions where appropriate.
     5. Use double quotes for strings.
+    6. Use `is None` and `is not None` for `None` checks.
