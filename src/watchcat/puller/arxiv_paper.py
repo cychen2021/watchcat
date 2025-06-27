@@ -34,8 +34,8 @@ class ArxivPaper(Post):
     def published_date(self) -> datetime:
         """Alias for publish_date to match Post protocol."""
         return self.__published_date
-    
-    @property 
+
+    @property
     def pulled_date(self) -> datetime:
         """Alias for pull_date to match Post protocol."""
         return self.pull_date
