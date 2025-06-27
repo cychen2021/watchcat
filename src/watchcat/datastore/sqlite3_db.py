@@ -1,13 +1,16 @@
 import sqlite3
-from  phdkit.configlib import configurable, setting
+from phdkit.configlib import configurable, setting
 from phdkit.util import todo
 from .database import Database
+
 
 def __read_config(config_file: str | None = None):
     return todo()
 
+
 def __read_env(config_file: str | None = None):
     return todo()
+
 
 @configurable(__read_config, config_key="store.sqlite3", load_env=__read_env)
 class SQLite3DB(Database):

@@ -3,11 +3,14 @@ from phdkit.configlib import configurable, setting
 from abc import ABC, abstractmethod
 from phdkit.util import unimplemented
 
+
 def __read_config(config_file: str | None = None):
     return todo()
 
+
 def __read_env(config_file: str | None = None):
     return todo()
+
 
 @configurable(__read_config, config_key="datastore", load_env=__read_env)
 class Database(ABC):
