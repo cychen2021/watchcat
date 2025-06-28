@@ -8,8 +8,8 @@ from litellm import embedding
 from litellm.types.utils import Embedding
 from litellm.types.utils import EmbeddingResponse
 from phdkit.autoretry import AutoRetry
-from .paper import ArxivPaper
-from .arxiv import ArxivClient, ArxivSearch, ArxivSortBy
+# from .paper import ArxivPaper
+# from .arxiv import ArxivClient, ArxivSearch, ArxivSortBy
 
 __all__ = ["Agent", "ProviderInfo", "GeminiProviderInfo", "ModelInfo"]
 
@@ -105,7 +105,7 @@ class Agent:
         self.__topic: str | None = None
         self.__topic_embedding: list[float] | None = None
         self.__keywords: list[str] = []
-        self.__arxiv_client: ArxivClient = ArxivClient()
+        # self.__arxiv_client: ArxivClient = ArxivClient()
 
         self.__relevance_threshold: float = 0.7
 
@@ -173,52 +173,52 @@ class Agent:
     def __arxiv_api_dateformat(date: datetime) -> str:
         return date.strftime("%Y%m%d%H%M")
 
-    def fetch_papers(self) -> Sequence[ArxivPaper]:
-        now = datetime.now(UTC)
-        today = datetime(now.year, now.month, now.day, 6, 0, 0, tzinfo=UTC)
-        yesterday = today - timedelta(days=30)
+    # def fetch_papers(self) -> Sequence[ArxivPaper]:
+    #     now = datetime.now(UTC)
+    #     today = datetime(now.year, now.month, now.day, 6, 0, 0, tzinfo=UTC)
+    #     yesterday = today - timedelta(days=30)
 
-        keyword_query = " OR ".join(f'"{keyword}"' for keyword in self.__keywords)
-        date_query = f"submittedDate:[{self.__arxiv_api_dateformat(yesterday)} TO {self.__arxiv_api_dateformat(today)}]"
+    #     keyword_query = " OR ".join(f'"{keyword}"' for keyword in self.__keywords)
+    #     date_query = f"submittedDate:[{self.__arxiv_api_dateformat(yesterday)} TO {self.__arxiv_api_dateformat(today)}]"
 
-        if keyword_query:
-            full_query = f"({keyword_query}) AND {date_query}"
-        else:
-            full_query = date_query
+    #     if keyword_query:
+    #         full_query = f"({keyword_query}) AND {date_query}"
+    #     else:
+    #         full_query = date_query
 
-        search = ArxivSearch(
-            query=full_query,
-            max_results=self.MAX_PAPERS_PER_DAY,
-            sort_by=ArxivSortBy.RELEVANCE,
-            ascending=False,
-        )
-        results = list(self.__arxiv_client.results(search))
-        self.logger.debug(
-            f"Query {full_query} returned {len(results)} results",
-            message="\n".join(str(r) for r in results),
-        )
-        return results
+    #     search = ArxivSearch(
+    #         query=full_query,
+    #         max_results=self.MAX_PAPERS_PER_DAY,
+    #         sort_by=ArxivSortBy.RELEVANCE,
+    #         ascending=False,
+    #     )
+    #     results = list(self.__arxiv_client.results(search))
+    #     self.logger.debug(
+    #         f"Query {full_query} returned {len(results)} results",
+    #         message="\n".join(str(r) for r in results),
+    #     )
+    #     return results
 
-    def worth_reading(self, paper: ArxivPaper) -> bool:
-        self.logger.info(
-            "Checking worthiness of paper", f"Paper {paper.id} ({paper.title})"
-        )
-        topic_embedding = self.__topic_embedding
-        if topic_embedding is None:
-            raise ValueError("Topic embedding is not set")
-        paper_embedding = self.get_paper_embedding(paper)
-        relevance = self.compare_embeddings(topic_embedding, paper_embedding)
-        worth = relevance >= self.__relevance_threshold
+    # def worth_reading(self, paper: ArxivPaper) -> bool:
+    #     self.logger.info(
+    #         "Checking worthiness of paper", f"Paper {paper.id} ({paper.title})"
+    #     )
+    #     topic_embedding = self.__topic_embedding
+    #     if topic_embedding is None:
+    #         raise ValueError("Topic embedding is not set")
+    #     paper_embedding = self.get_paper_embedding(paper)
+    #     relevance = self.compare_embeddings(topic_embedding, paper_embedding)
+    #     worth = relevance >= self.__relevance_threshold
 
-        if worth:
-            self.logger.info(
-                "Worth reading paper",
-                f"Paper {paper.id} is worth reading (relevance: {relevance})",
-            )
+    #     if worth:
+    #         self.logger.info(
+    #             "Worth reading paper",
+    #             f"Paper {paper.id} is worth reading (relevance: {relevance})",
+    #         )
 
-        return worth
+    #     return worth
 
-    def get_paper_embedding(self, paper: ArxivPaper) -> list[float]:
-        if self.embedding_model is None:
-            raise ValueError("Embedding model is not set")
-        return self.__get_embedding(paper.abstract)
+    # def get_paper_embedding(self, paper: ArxivPaper) -> list[float]:
+    #     if self.embedding_model is None:
+    #         raise ValueError("Embedding model is not set")
+    #     return self.__get_embedding(paper.abstract)
