@@ -1,0 +1,3 @@
+# Goals of Watchcat
+
+TODO
