@@ -41,8 +41,3 @@ watchcat = "watchcat:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[dependency-groups]
-dev = [
-    "black>=25.1.0",
-]

@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "black",
+# ]
+# ///
 import os
 import subprocess
 
