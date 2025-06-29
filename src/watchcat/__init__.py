@@ -6,7 +6,7 @@ import os
 import xdg_base_dirs as xdg
 from datetime import datetime, UTC
 import litellm
-from .agent import Agent
+from .workflow import Automaton
 
 litellm.suppress_debug_info = True
 

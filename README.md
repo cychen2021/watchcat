@@ -1,3 +1,3 @@
-# Watchcat - AI Watchdog Who Tracks Research Trends
+# Watchcat - AI Watchdog that Tracks Research Trends
 
 TODO
