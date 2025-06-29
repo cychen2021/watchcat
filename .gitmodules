@@ -1,0 +1,3 @@
+[submodule "copilot-instructions"]
+	path = copilot-instructions
+	url = https://github.com/cychen2021/copilot-instructions.git
