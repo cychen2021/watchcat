@@ -1,4 +1,5 @@
 import sqlite3
+import sqlite_vec
 from phdkit.configlib import configurable, setting
 from phdkit.util import todo
 from .database import Database
