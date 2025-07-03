@@ -27,5 +27,8 @@
     "TODO": ["TODO", "todo"],
     "BUG": ["BUG", "FIXME"]
   },
-  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.)|return )\\s*($TAGS)"
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.)|return )\\s*($TAGS)",
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportPrivateImportUsage": "information"
+  }
 }
