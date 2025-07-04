@@ -199,7 +199,7 @@ class Arxiv(Source):
 
             end_date = datetime.now()
             start_date = end_date - timedelta(days=7)  # Last week by default
-            query = f'submittedDate:[{start_date.strftime("%Y%m%d%H%M")} TO {end_date.strftime("%Y%m%d%H%M")}]'
+            query = f"submittedDate:[{start_date.strftime('%Y%m%d%H%M')} TO {end_date.strftime('%Y%m%d%H%M')}]"
 
         # Make request to ArXiv API
         papers = self._fetch_papers_from_arxiv(query)

@@ -135,21 +135,21 @@ class Agent:
             api_key=api_key,
         )
 
-        assert isinstance(
-            response, EmbeddingResponse
-        ), f"Expected EmbeddingResponse, got {type(response)}"
-        assert isinstance(
-            response.data, list
-        ), f"Expected list, got {type(response.data)}"
+        assert isinstance(response, EmbeddingResponse), (
+            f"Expected EmbeddingResponse, got {type(response)}"
+        )
+        assert isinstance(response.data, list), (
+            f"Expected list, got {type(response.data)}"
+        )
         if response.data:
             assert len(response.data) == 1, "Expected exactly one embedding"
             embedding_data = response.data[0]
-            assert isinstance(
-                embedding_data, Embedding
-            ), f"Expected Embedding, got {type(embedding_data)}"
-            assert isinstance(
-                embedding_data.embedding, list
-            ), f"Expected list, got {type(embedding_data.embedding)}"
+            assert isinstance(embedding_data, Embedding), (
+                f"Expected Embedding, got {type(embedding_data)}"
+            )
+            assert isinstance(embedding_data.embedding, list), (
+                f"Expected list, got {type(embedding_data.embedding)}"
+            )
             return embedding_data.embedding
         else:
             raise ValueError("No embedding data returned")

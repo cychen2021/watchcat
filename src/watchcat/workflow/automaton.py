@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class State:
     INIT = "init"
     PULLING = "pulling"
@@ -8,5 +9,5 @@ class State:
     FEEDBACK = "feedback"
     DONE = "done"
 
-class Automaton:
-    ...
+
+class Automaton: ...
