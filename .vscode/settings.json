@@ -1,18 +1,13 @@
 {
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
-      "file": "copilot-instructions/commit.instructions.md"
+      "file": "copilot-instructions/commit/commit-general.instructions.md"
     }
   ],
-  "github.copilot.chat.codeGeneration.instructions": [
-    {
-      "file": "copilot-instructions/codegen-python.instructions.md",
-      "language": "python"
-    },
-    {
-      "file": "project-structure.instructions.md"
-    }
-  ],
+  "chat.instructionsFilesLocations": {
+    ".github/instructions": true,
+    "copilot-instructions/codegen": true
+  },
   "todo-tree.general.tags": [
     "BUG",
     "HACK",
