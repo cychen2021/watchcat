@@ -20,15 +20,17 @@ class PostSerializer:
         serialized = []
         for post in posts:
             try:
-                serialized.append({
-                    "id": post.id,
-                    "url": post.url,
-                    "source": post.source,
-                    "published_date": post.published_date.isoformat(),
-                    "pulled_date": post.pulled_date.isoformat(),
-                    "attachments": list(post.attachments),
-                    "content": post.serializable_object()
-                })
+                serialized.append(
+                    {
+                        "id": post.id,
+                        "url": post.url,
+                        "source": post.source,
+                        "published_date": post.published_date.isoformat(),
+                        "pulled_date": post.pulled_date.isoformat(),
+                        "attachments": list(post.attachments),
+                        "content": post.serializable_object(),
+                    }
+                )
             except Exception:
                 # Log error but continue with other posts
                 # In a real implementation, we might want to use a logger here

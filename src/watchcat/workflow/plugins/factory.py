@@ -18,7 +18,9 @@ class PluginFactory:
         """
         self.logger = logger
 
-    def create_source(self, source_id: str, source_type: str, config: Dict[str, Any]) -> Optional[Source]:
+    def create_source(
+        self, source_id: str, source_type: str, config: Dict[str, Any]
+    ) -> Optional[Source]:
         """Create a source instance from configuration.
 
         Args:
@@ -36,10 +38,15 @@ class PluginFactory:
         # TODO: Implement dynamic source creation based on type
         # This would import the appropriate source class and instantiate it
         if self.logger:
-            self.logger.warning("Source Creation", f"Source creation not implemented for type: {source_type}")
+            self.logger.warning(
+                "Source Creation",
+                f"Source creation not implemented for type: {source_type}",
+            )
         return None
 
-    def create_processor(self, processor_id: str, processor_type: str, config: Dict[str, Any]) -> Optional[Any]:
+    def create_processor(
+        self, processor_id: str, processor_type: str, config: Dict[str, Any]
+    ) -> Optional[Any]:
         """Create a processor instance from configuration.
 
         Args:
@@ -56,10 +63,15 @@ class PluginFactory:
         """
         # TODO: Implement dynamic processor creation based on type
         if self.logger:
-            self.logger.warning("Processor Creation", f"Processor creation not implemented for type: {processor_type}")
+            self.logger.warning(
+                "Processor Creation",
+                f"Processor creation not implemented for type: {processor_type}",
+            )
         return None
 
-    def create_notifier(self, notifier_id: str, notifier_type: str, config: Dict[str, Any]) -> Optional[Any]:
+    def create_notifier(
+        self, notifier_id: str, notifier_type: str, config: Dict[str, Any]
+    ) -> Optional[Any]:
         """Create a notifier instance from configuration.
 
         Args:
@@ -76,7 +88,10 @@ class PluginFactory:
         """
         # TODO: Implement dynamic notifier creation based on type
         if self.logger:
-            self.logger.warning("Notifier Creation", f"Notifier creation not implemented for type: {notifier_type}")
+            self.logger.warning(
+                "Notifier Creation",
+                f"Notifier creation not implemented for type: {notifier_type}",
+            )
         return None
 
     def create_filter(self, filter_config: Dict[str, Any]) -> Optional[SourceFilter]:
@@ -96,5 +111,8 @@ class PluginFactory:
         # This would create different types of filters (date, keyword, etc.) based on config
         filter_type = filter_config.get("type")
         if self.logger:
-            self.logger.warning("Filter Creation", f"Filter creation not implemented for type: {filter_type}")
+            self.logger.warning(
+                "Filter Creation",
+                f"Filter creation not implemented for type: {filter_type}",
+            )
         return None

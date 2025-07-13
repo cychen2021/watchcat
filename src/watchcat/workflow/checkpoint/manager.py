@@ -33,7 +33,7 @@ class CheckpointManager:
         user_model: Dict[str, Any],
         pulled_posts: List[Post],
         processed_insights: List[Any],
-        notifications_sent: List[Dict[str, Any]]
+        notifications_sent: List[Dict[str, Any]],
     ) -> None:
         """Save current workflow state to checkpoint.
 
@@ -60,9 +60,11 @@ class CheckpointManager:
             }
 
             self._store_checkpoint(checkpoint_data)
-            
+
             if self.logger:
-                self.logger.info("Checkpoint", f"Saved checkpoint for state: {state.value}")
+                self.logger.info(
+                    "Checkpoint", f"Saved checkpoint for state: {state.value}"
+                )
 
         except Exception as e:
             error_msg = f"Failed to save checkpoint: {e}"
@@ -82,22 +84,28 @@ class CheckpointManager:
         try:
             # Query for the latest checkpoint
             checkpoint_data = self._query_latest_checkpoint()
-            
+
             if checkpoint_data:
                 # Deserialize posts if present
                 if "pulled_posts" in checkpoint_data:
-                    checkpoint_data["pulled_posts"] = self.post_serializer.deserialize_posts(
-                        checkpoint_data["pulled_posts"]
+                    checkpoint_data["pulled_posts"] = (
+                        self.post_serializer.deserialize_posts(
+                            checkpoint_data["pulled_posts"]
+                        )
                     )
-                
+
                 if self.logger:
                     state = checkpoint_data.get("state", "unknown")
-                    self.logger.info("Checkpoint", f"Restored checkpoint from state: {state}")
-                
+                    self.logger.info(
+                        "Checkpoint", f"Restored checkpoint from state: {state}"
+                    )
+
                 return checkpoint_data
             else:
                 if self.logger:
-                    self.logger.info("Checkpoint", "No checkpoint found, starting fresh")
+                    self.logger.info(
+                        "Checkpoint", "No checkpoint found, starting fresh"
+                    )
                 return None
 
         except Exception as e:

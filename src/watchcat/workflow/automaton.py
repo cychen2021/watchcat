@@ -30,7 +30,7 @@ class Automaton:
         self,
         config_path: Optional[str] = None,
         env_path: Optional[str] = None,
-        develop_mode: bool = True
+        develop_mode: bool = True,
     ) -> None:
         """Initialize the automaton with configuration paths."""
         self.state: State = State.INIT
@@ -62,7 +62,9 @@ class Automaton:
         """Run the automaton until completion."""
         try:
             while self.state is not State.DONE:
-                self.workflow_logger.log_info("State Transition", f"Transitioning to state: {self.state.value}")
+                self.workflow_logger.log_info(
+                    "State Transition", f"Transitioning to state: {self.state.value}"
+                )
 
                 if self.state is State.INIT:
                     self._initialize()
@@ -85,12 +87,14 @@ class Automaton:
                         self.user_model,
                         self.pulled_posts,
                         self.processed_insights,
-                        self.notifications_sent
+                        self.notifications_sent,
                     )
 
         except Exception as e:
             self.last_error = e
-            self.workflow_logger.log_error("Workflow Error", f"Workflow failed in state {self.state.value}: {e}")
+            self.workflow_logger.log_error(
+                "Workflow Error", f"Workflow failed in state {self.state.value}: {e}"
+            )
             self._handle_error(e)
             raise
 
@@ -102,7 +106,9 @@ class Automaton:
 
         # Setup logging using WorkflowLogger
         self.logger = self.workflow_logger.setup_logging()
-        self.workflow_logger.log_info("Initialization", "Initializing Watchcat workflow")
+        self.workflow_logger.log_info(
+            "Initialization", "Initializing Watchcat workflow"
+        )
 
         # Initialize datastore
         self._initialize_datastore()
@@ -135,13 +141,17 @@ class Automaton:
         self.pulled_posts = []
 
         if not self.plugin_registry:
-            self.workflow_logger.log_error("Data Pulling", "Plugin registry not initialized")
+            self.workflow_logger.log_error(
+                "Data Pulling", "Plugin registry not initialized"
+            )
             self.state = State.SUMMARIZING
             return
 
         for source in self.plugin_registry.sources:
             try:
-                self.workflow_logger.log_info("Source Processing", f"Pulling data from source: {source.id}")
+                self.workflow_logger.log_info(
+                    "Source Processing", f"Pulling data from source: {source.id}"
+                )
 
                 # Apply configured filters using plugin registry
                 filters = self.plugin_registry.get_source_filters(source)
@@ -152,18 +162,27 @@ class Automaton:
                     self._store_post(post)
                     self.pulled_posts.append(post)
 
-                self.workflow_logger.log_info("Source Complete", f"Pulled {len(posts)} posts from {source.id}")
+                self.workflow_logger.log_info(
+                    "Source Complete", f"Pulled {len(posts)} posts from {source.id}"
+                )
 
             except Exception as e:
-                self.workflow_logger.log_error("Source Error", f"Failed to pull from source {source.id}: {e}")
+                self.workflow_logger.log_error(
+                    "Source Error", f"Failed to pull from source {source.id}: {e}"
+                )
                 continue
 
-        self.workflow_logger.log_info("Data Pulling", f"Data pulling complete. Total posts: {len(self.pulled_posts)}")
+        self.workflow_logger.log_info(
+            "Data Pulling",
+            f"Data pulling complete. Total posts: {len(self.pulled_posts)}",
+        )
         self.state = State.SUMMARIZING
 
     def _summarize(self) -> None:
         """Run processing pipeline using registered processors."""
-        self.workflow_logger.log_info("Processing Pipeline", "Starting processing pipeline")
+        self.workflow_logger.log_info(
+            "Processing Pipeline", "Starting processing pipeline"
+        )
         self.processed_insights = []
 
         for post in self.pulled_posts:
@@ -173,50 +192,69 @@ class Automaton:
                     self.processed_insights.append(insight)
                     self._store_insight(insight)
             except Exception as e:
-                self.workflow_logger.log_error("Post Processing Error", f"Failed to process post {post.id}: {e}")
+                self.workflow_logger.log_error(
+                    "Post Processing Error", f"Failed to process post {post.id}: {e}"
+                )
                 continue
 
-        self.workflow_logger.log_info("Processing Pipeline", f"Processing complete. Generated {len(self.processed_insights)} insights")
+        self.workflow_logger.log_info(
+            "Processing Pipeline",
+            f"Processing complete. Generated {len(self.processed_insights)} insights",
+        )
         self.state = State.EVALUATING
 
     def _evaluate_model(self) -> None:
         """Update the user model based on processed insights."""
-        self.workflow_logger.log_info("User Model", "Evaluating and updating user model")
-        
+        self.workflow_logger.log_info(
+            "User Model", "Evaluating and updating user model"
+        )
+
         # Basic user model update (placeholder implementation)
         if "metrics" not in self.user_model:
-            self.user_model["metrics"] = {"total_insights_generated": 0, "last_update": None}
-        
-        self.user_model["metrics"]["total_insights_generated"] += len(self.processed_insights)
+            self.user_model["metrics"] = {
+                "total_insights_generated": 0,
+                "last_update": None,
+            }
+
+        self.user_model["metrics"]["total_insights_generated"] += len(
+            self.processed_insights
+        )
         self.user_model["metrics"]["last_update"] = datetime.now(UTC).isoformat()
-        
+
         self.workflow_logger.log_info("User Model", "User model update complete")
         self.state = State.FEEDBACK
 
     def _handle_feedback(self) -> None:
         """Handle feedback loop and notifications."""
-        self.workflow_logger.log_info("Feedback Processing", "Processing feedback and notifications")
-        
+        self.workflow_logger.log_info(
+            "Feedback Processing", "Processing feedback and notifications"
+        )
+
         # Basic notification handling (placeholder implementation)
         notifications = []
         if len(self.processed_insights) > 0:
-            notifications.append({
-                "type": "info",
-                "message": f"Processed {len(self.processed_insights)} insights",
-                "channels": ["log"]
-            })
+            notifications.append(
+                {
+                    "type": "info",
+                    "message": f"Processed {len(self.processed_insights)} insights",
+                    "channels": ["log"],
+                }
+            )
 
         for notification in notifications:
             self._send_basic_notification(notification)
             self.notifications_sent.append(notification)
 
-        self.workflow_logger.log_info("Feedback Processing", f"Feedback processing complete. Sent {len(self.notifications_sent)} notifications")
+        self.workflow_logger.log_info(
+            "Feedback Processing",
+            f"Feedback processing complete. Sent {len(self.notifications_sent)} notifications",
+        )
         self.state = State.DONE
 
     def _initialize_datastore(self) -> None:
         """Initialize the datastore connection."""
         from ..datastore.sqlite3_db import SQLite3DB
-        
+
         db_path = self.config_data.get("datastore", {}).get("path", "watchcat.db")
         self.datastore = SQLite3DB(db_path)
         self.datastore.open()
@@ -228,7 +266,7 @@ class Automaton:
             "source": post.source,
             "processed_date": datetime.now(UTC).isoformat(),
             "relevance_score": 0.5,  # Default score
-            "metadata": {}
+            "metadata": {},
         }
 
         # Process through registered processors
@@ -239,10 +277,12 @@ class Automaton:
                     # For now, just record that it was processed
                     insight["metadata"][f"processor_{type(processor).__name__}"] = {
                         "processed": True,
-                        "timestamp": datetime.now(UTC).isoformat()
+                        "timestamp": datetime.now(UTC).isoformat(),
                     }
                 except Exception as e:
-                    self.workflow_logger.log_error("Processor Error", f"Processor failed for post {post.id}: {e}")
+                    self.workflow_logger.log_error(
+                        "Processor Error", f"Processor failed for post {post.id}: {e}"
+                    )
                     continue
 
         return insight
@@ -253,7 +293,9 @@ class Automaton:
 
     def _store_insight(self, insight: Dict[str, Any]) -> None:
         """Store processed insight in the datastore (placeholder implementation)."""
-        self.workflow_logger.log_info("Insight Storage", f"Stored insight for post: {insight['post_id']}")
+        self.workflow_logger.log_info(
+            "Insight Storage", f"Stored insight for post: {insight['post_id']}"
+        )
 
     def _send_basic_notification(self, notification: Dict[str, Any]) -> None:
         """Send a basic notification (placeholder implementation)."""
@@ -265,7 +307,12 @@ class Automaton:
         self.retry_count += 1
 
         if self.retry_count <= self.max_retries:
-            self.workflow_logger.log_warning("Error Recovery", f"Retrying after error (attempt {self.retry_count}/{self.max_retries})")
+            self.workflow_logger.log_warning(
+                "Error Recovery",
+                f"Retrying after error (attempt {self.retry_count}/{self.max_retries})",
+            )
         else:
-            self.workflow_logger.log_critical("Error Recovery", "Max retries exceeded, workflow terminated")
+            self.workflow_logger.log_critical(
+                "Error Recovery", "Max retries exceeded, workflow terminated"
+            )
             self.state = State.DONE

@@ -7,10 +7,10 @@ from .plugins import PluginRegistry
 
 __all__ = [
     "State",
-    "Automaton", 
+    "Automaton",
     "AutomatonError",
     "ConfigurationError",
     "ConfigurationLoader",
-    "CheckpointManager", 
-    "PluginRegistry"
+    "CheckpointManager",
+    "PluginRegistry",
 ]

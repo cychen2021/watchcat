@@ -37,7 +37,9 @@ class ConfigurationLoader:
                 with open(config_path, "rb") as f:
                     self._config_data = tomllib.load(f)
             else:
-                raise ConfigurationError(f"Configuration file not found: {self.config_path}")
+                raise ConfigurationError(
+                    f"Configuration file not found: {self.config_path}"
+                )
 
             # Load environment variables if available
             env_path = Path(self.env_path)
@@ -74,7 +76,9 @@ class ConfigurationLoader:
         """
         return self._config_data.get(section_name, {})
 
-    def get_setting(self, section_name: str, setting_name: str, default: Any = None) -> Any:
+    def get_setting(
+        self, section_name: str, setting_name: str, default: Any = None
+    ) -> Any:
         """Get a specific setting from a configuration section.
 
         Args:

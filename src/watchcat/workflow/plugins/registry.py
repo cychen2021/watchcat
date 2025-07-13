@@ -12,7 +12,9 @@ from .factory import PluginFactory
 class PluginRegistry:
     """Manages registration and discovery of workflow plugins."""
 
-    def __init__(self, config_data: Dict[str, Any], logger: Optional[Logger] = None) -> None:
+    def __init__(
+        self, config_data: Dict[str, Any], logger: Optional[Logger] = None
+    ) -> None:
         """Initialize the plugin registry.
 
         Args:
@@ -49,7 +51,7 @@ class PluginRegistry:
                     "Plugin Registration",
                     f"Registered {len(self.sources)} sources, "
                     f"{len(self.processors)} processors, "
-                    f"{len(self.notifiers)} notifiers"
+                    f"{len(self.notifiers)} notifiers",
                 )
 
         except Exception as e:
@@ -83,7 +85,7 @@ class PluginRegistry:
                     if self.logger:
                         self.logger.error(
                             "Filter Creation Error",
-                            f"Failed to create filter for source {source.id}: {e}"
+                            f"Failed to create filter for source {source.id}: {e}",
                         )
                     continue
 
@@ -93,7 +95,7 @@ class PluginRegistry:
             if self.logger:
                 self.logger.error(
                     "Filter Configuration Error",
-                    f"Failed to get filters for source {source.id}: {e}"
+                    f"Failed to get filters for source {source.id}: {e}",
                 )
             return []
 
@@ -110,15 +112,22 @@ class PluginRegistry:
                     continue
 
                 # Dynamically import and instantiate source based on type
-                source = self.factory.create_source(source_id, source_type, source_config)
+                source = self.factory.create_source(
+                    source_id, source_type, source_config
+                )
                 if source:
                     self.sources.append(source)
                     if self.logger:
-                        self.logger.info("Source Registration", f"Registered source: {source_id}")
+                        self.logger.info(
+                            "Source Registration", f"Registered source: {source_id}"
+                        )
 
             except Exception as e:
                 if self.logger:
-                    self.logger.error("Source Registration Error", f"Failed to register source {source_id}: {e}")
+                    self.logger.error(
+                        "Source Registration Error",
+                        f"Failed to register source {source_id}: {e}",
+                    )
                 continue
 
     def _register_processors(self) -> None:
@@ -134,15 +143,23 @@ class PluginRegistry:
                     continue
 
                 # Dynamically import and instantiate processor based on type
-                processor = self.factory.create_processor(processor_id, processor_type, processor_config)
+                processor = self.factory.create_processor(
+                    processor_id, processor_type, processor_config
+                )
                 if processor:
                     self.processors.append(processor)
                     if self.logger:
-                        self.logger.info("Processor Registration", f"Registered processor: {processor_id}")
+                        self.logger.info(
+                            "Processor Registration",
+                            f"Registered processor: {processor_id}",
+                        )
 
             except Exception as e:
                 if self.logger:
-                    self.logger.error("Processor Registration Error", f"Failed to register processor {processor_id}: {e}")
+                    self.logger.error(
+                        "Processor Registration Error",
+                        f"Failed to register processor {processor_id}: {e}",
+                    )
                 continue
 
     def _register_notifiers(self) -> None:
@@ -158,13 +175,21 @@ class PluginRegistry:
                     continue
 
                 # Dynamically import and instantiate notifier based on type
-                notifier = self.factory.create_notifier(notifier_id, notifier_type, notifier_config)
+                notifier = self.factory.create_notifier(
+                    notifier_id, notifier_type, notifier_config
+                )
                 if notifier:
                     self.notifiers.append(notifier)
                     if self.logger:
-                        self.logger.info("Notifier Registration", f"Registered notifier: {notifier_id}")
+                        self.logger.info(
+                            "Notifier Registration",
+                            f"Registered notifier: {notifier_id}",
+                        )
 
             except Exception as e:
                 if self.logger:
-                    self.logger.error("Notifier Registration Error", f"Failed to register notifier {notifier_id}: {e}")
+                    self.logger.error(
+                        "Notifier Registration Error",
+                        f"Failed to register notifier {notifier_id}: {e}",
+                    )
                 continue
