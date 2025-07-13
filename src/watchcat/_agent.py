@@ -1,3 +1,5 @@
+"""This proof-of-concept has been deprecated."""
+
 import tomllib
 from dataclasses import dataclass
 from phdkit.configlib import configurable, setting
