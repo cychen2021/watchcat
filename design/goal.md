@@ -9,7 +9,6 @@ The core goal of Watchcat is to collect and analyze information from various sou
 - Analyze and summarize collected information using natural language processing and machine learning techniques.
 - Continuously learn user preferences through interaction tracking and feedback loops to refine future insights.
 - Provide configurable alerting and notification mechanisms based on user-defined criteria and thresholds.
-- Ensure data security and privacy through encryption, access controls, and secure communication channels.
 - Offer an extensible plugin architecture to easily add new data sources and analysis modules.
 - Present insights through interactive dashboards, visual reports, and exportable summaries.
 
