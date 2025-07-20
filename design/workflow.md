@@ -2,6 +2,22 @@
 
 This document outlines the end-to-end workflow of the Watchcat system, aligning with the goals defined in `goal.md`.
 
+## Overview
+
+```mermaid
+graph TD;
+    A[Initialization] --> B[Data Pulling];
+    B --> C[Processing Pipeline];
+    C --> D[User Model Update];
+    D --> E[Notification Engine];
+    E --> F[Reporting & API];
+    F --> G[Scheduling & Execution];
+    G --> H[Feedback Loop];
+    H --> I[Extensibility];
+    I --> A;
+```
+TODO: Improve the workflow
+
 ## 1. Initialization
 
 - Load configuration (`watchcat.config.toml`) and user settings.
