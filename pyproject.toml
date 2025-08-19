@@ -15,6 +15,7 @@ dependencies = [
     "google-cloud-storage>=3.1.0",
     "litellm>=1.71.2",
     "phdkit",
+    "rich>=14.1.0",
     "sqlite-vec>=0.1.6",
     "tqdm>=4.67.1",
     "xdg-base-dirs>=6.0.2",
