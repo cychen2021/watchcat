@@ -2,6 +2,10 @@
 
 This document outlines the end-to-end workflow of the Watchcat system, aligning with the goals defined in `goal.md`.
 
+## Immature thoughts
+
+- A possibility is to prompt the LLM to think about how the information may interact with what we are interested in (e.g., enabling a new approach to reach our goal) and assess the feasibility and potential impact. We can then filter the results based on relevance, confidence, and importance.
+
 ## Overview
 
 ```mermaid
