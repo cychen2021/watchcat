@@ -13,11 +13,11 @@ Your summary should be output to a JSON array in a code block. Each element in t
 
 where keywords should be all lower case words separated by underscores, and category can be
 
-- "research"
-- "news"
-- "blog"
-- "tutorial"
-- "other"
+- research
+- news
+- blog
+- tutorial
+- other
 
 An example response is as follows:
 
