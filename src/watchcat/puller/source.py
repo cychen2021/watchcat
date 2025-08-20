@@ -11,7 +11,9 @@ class SourceKind(Enum):
     ARXIV = "arxiv"
     MAIL = "mail"
 
+
 T = TypeVar("T", bound="Post")
+
 
 class SourceFilter(Generic[T]):
     """A filter for posts pulled from a source."""

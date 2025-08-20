@@ -12,7 +12,7 @@ class TestMail:
         received_date = datetime(2023, 6, 15, 12, 30)
         pulled_date = datetime(2023, 6, 16, 10, 0)
         attachments = ["file1.pdf", "file2.txt"]
-        
+
         mail = Mail(
             id="msg_12345",
             url="mailbox://example.com/INBOX/12345",
@@ -23,7 +23,7 @@ class TestMail:
             pulled_date=pulled_date,
             source="test@example.com",
         )
-        
+
         assert mail.id == "msg_12345"
         assert mail.url == "mailbox://example.com/INBOX/12345"
         assert mail.subject == "Test Email"
@@ -36,7 +36,7 @@ class TestMail:
     def test_mail_auto_pulled_date(self):
         """Test Mail with auto-generated pulled date."""
         before_creation = datetime.now()
-        
+
         mail = Mail(
             id="msg_12345",
             url="mailbox://example.com/INBOX/12345",
@@ -46,9 +46,9 @@ class TestMail:
             received_date=datetime(2023, 6, 15),
             source="test@example.com",
         )
-        
+
         after_creation = datetime.now()
-        
+
         # Check that pulled_date is between before and after creation time
         assert before_creation <= mail.pulled_date <= after_creation
 
@@ -63,7 +63,7 @@ class TestMail:
             received_date=datetime(2023, 6, 15),
             source="test@example.com",
         )
-        
+
         assert mail.attachments == []
 
     def test_to_prompt(self):
@@ -77,7 +77,7 @@ class TestMail:
             received_date=datetime(2023, 6, 15),
             source="test@example.com",
         )
-        
+
         prompt = mail.to_prompt()
         assert "# Test Email Subject" in prompt
         assert "This is the email body content." in prompt
@@ -93,7 +93,7 @@ class TestMail:
             received_date=datetime(2023, 6, 15),
             source="test@example.com",
         )
-        
+
         repr_str = repr(mail)
         assert "msg_12345" in repr_str
         assert "mailbox://example.com/INBOX/12345" in repr_str
@@ -106,7 +106,7 @@ class TestMail:
         received_date = datetime(2023, 6, 15, 12, 30)
         pulled_date = datetime(2023, 6, 16, 10, 0)
         attachments = ["file1.pdf", "file2.txt"]
-        
+
         mail = Mail(
             id="msg_12345",
             url="mailbox://example.com/INBOX/12345",
@@ -117,9 +117,9 @@ class TestMail:
             pulled_date=pulled_date,
             source="test@example.com",
         )
-        
+
         serialized = mail.serializable_object()
-        
+
         expected = {
             "id": "msg_12345",
             "url": "mailbox://example.com/INBOX/12345",
@@ -130,7 +130,7 @@ class TestMail:
             "pulled_date": "2023-06-16T10:00:00",
             "source": "test@example.com",
         }
-        
+
         assert serialized == expected
 
     def test_serializable_object_empty_attachments(self):
@@ -145,7 +145,7 @@ class TestMail:
             pulled_date=datetime(2023, 6, 16, 10, 0),
             source="test@example.com",
         )
-        
+
         serialized = mail.serializable_object()
         assert serialized["attachments"] == ""
 
@@ -161,9 +161,9 @@ class TestMail:
             "pulled_date": "2023-06-16T10:00:00",
             "source": "test@example.com",
         }
-        
+
         mail = Mail.from_serializable_object(serialized_data)
-        
+
         assert mail.id == "msg_12345"
         assert mail.url == "mailbox://example.com/INBOX/12345"
         assert mail.subject == "Test Email"
@@ -185,7 +185,7 @@ class TestMail:
             "pulled_date": "2023-06-16T10:00:00",
             "source": "test@example.com",
         }
-        
+
         mail = Mail.from_serializable_object(serialized_data)
         assert mail.attachments == []
 
@@ -201,11 +201,11 @@ class TestMail:
             pulled_date=datetime(2023, 6, 16, 10, 0),
             source="test@example.com",
         )
-        
+
         # Serialize and then deserialize
         serialized = original_mail.serializable_object()
         restored_mail = Mail.from_serializable_object(serialized)
-        
+
         # Check that all important attributes match
         assert restored_mail.id == original_mail.id
         assert restored_mail.url == original_mail.url
@@ -227,7 +227,7 @@ class TestMail:
             received_date=datetime(2023, 6, 15),
             source="test@example.com",
         )
-        
+
         prompt = mail.to_prompt()
         assert "line 1" in prompt
         assert "line 2" in prompt

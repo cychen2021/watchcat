@@ -11,7 +11,7 @@ class TestArxivPaper:
         """Test ArxivPaper object initialization."""
         test_date = datetime(2023, 6, 15, 12, 30)
         pulled_date = datetime(2023, 6, 16, 10, 0)
-        
+
         paper = ArxivPaper(
             id="2306.12345",
             url="http://arxiv.org/abs/2306.12345",
@@ -22,7 +22,7 @@ class TestArxivPaper:
             pulled_date=pulled_date,
             source="ArXiv: Test Paper",
         )
-        
+
         assert paper.id == "2306.12345"
         assert paper.url == "http://arxiv.org/abs/2306.12345"
         assert paper.paper_url == "http://arxiv.org/pdf/2306.12345.pdf"
@@ -35,7 +35,7 @@ class TestArxivPaper:
     def test_arxiv_paper_auto_pulled_date(self):
         """Test ArxivPaper with auto-generated pulled date."""
         before_creation = datetime.now()
-        
+
         paper = ArxivPaper(
             id="2306.12345",
             url="http://arxiv.org/abs/2306.12345",
@@ -45,9 +45,9 @@ class TestArxivPaper:
             abstract="This is a test abstract.",
             source="ArXiv: Test Paper",
         )
-        
+
         after_creation = datetime.now()
-        
+
         # Check that pulled_date is between before and after creation time
         assert before_creation <= paper.pulled_date <= after_creation
 
@@ -62,7 +62,7 @@ class TestArxivPaper:
             abstract="This is a test abstract.",
             source="ArXiv: Test Paper",
         )
-        
+
         assert paper.attachments == ["http://arxiv.org/pdf/2306.12345.pdf"]
 
     def test_to_prompt(self):
@@ -76,7 +76,7 @@ class TestArxivPaper:
             abstract="This is a test abstract.",
             source="ArXiv: Test Paper",
         )
-        
+
         prompt = paper.to_prompt()
         assert "# Test Paper" in prompt
         assert "This is a test abstract." in prompt
@@ -92,7 +92,7 @@ class TestArxivPaper:
             abstract="This is a test abstract.",
             source="ArXiv: Test Paper",
         )
-        
+
         repr_str = repr(paper)
         assert "2306.12345" in repr_str
         assert "http://arxiv.org/abs/2306.12345" in repr_str
@@ -103,7 +103,7 @@ class TestArxivPaper:
         """Test serializable_object method returns correct dict."""
         test_date = datetime(2023, 6, 15, 12, 30)
         pulled_date = datetime(2023, 6, 16, 10, 0)
-        
+
         paper = ArxivPaper(
             id="2306.12345",
             url="http://arxiv.org/abs/2306.12345",
@@ -114,9 +114,9 @@ class TestArxivPaper:
             pulled_date=pulled_date,
             source="ArXiv: Test Paper",
         )
-        
+
         serialized = paper.serializable_object()
-        
+
         expected = {
             "id": "2306.12345",
             "url": "http://arxiv.org/abs/2306.12345",
@@ -127,7 +127,7 @@ class TestArxivPaper:
             "source": "ArXiv: Test Paper",
             "abstract": "This is a test abstract.",
         }
-        
+
         assert serialized == expected
 
     def test_from_serializable_object(self):
@@ -142,9 +142,9 @@ class TestArxivPaper:
             "source": "ArXiv: Test Paper",
             "abstract": "This is a test abstract.",
         }
-        
+
         paper = ArxivPaper.from_serializable_object(serialized_data)
-        
+
         assert paper.id == "2306.12345"
         assert paper.url == "http://arxiv.org/abs/2306.12345"
         assert paper.title == "Test Paper"
@@ -166,11 +166,11 @@ class TestArxivPaper:
             pulled_date=datetime(2023, 6, 16, 10, 0),
             source="ArXiv: Test Paper",
         )
-        
+
         # Serialize and then deserialize
         serialized = original_paper.serializable_object()
         restored_paper = ArxivPaper.from_serializable_object(serialized)
-        
+
         # Check that all important attributes match
         assert restored_paper.id == original_paper.id
         assert restored_paper.url == original_paper.url
@@ -193,7 +193,7 @@ class TestArxivPaper:
             abstract="This is the first line.\nThis is the second line.\nThis is the third line.",
             source="ArXiv: Test Paper",
         )
-        
+
         prompt = paper.to_prompt()
         assert "first line" in prompt
         assert "second line" in prompt

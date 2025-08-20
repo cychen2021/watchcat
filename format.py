@@ -15,7 +15,11 @@ def main() -> None:
     files = list(
         map(
             lambda f: os.path.join(PROJECT_ROOT, f),
-            ["src", *[f for f in os.listdir(PROJECT_ROOT) if f.endswith(".py")]],
+            [
+                "src",
+                "tests",
+                *[f for f in os.listdir(PROJECT_ROOT) if f.endswith(".py")],
+            ],
         )
     )
     subprocess.run(
