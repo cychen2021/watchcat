@@ -13,6 +13,7 @@ dependencies = [
     "google-auth-httplib2>=0.2.0",
     "google-auth-oauthlib>=1.2.2",
     "google-cloud-storage>=3.1.0",
+    "google-genai>=1.31.0",
     "litellm>=1.71.2",
     "phdkit",
     "rich>=14.1.0",
