@@ -4,7 +4,13 @@ from pathlib import Path
 
 def _load_fill_out():
     # Load the prompt module by running its __init__.py directly to avoid package install
-    mod_path = Path(__file__).resolve().parents[1] / "src" / "watchcat" / "prompt" / "__init__.py"
+    mod_path = (
+        Path(__file__).resolve().parents[1]
+        / "src"
+        / "watchcat"
+        / "prompt"
+        / "__init__.py"
+    )
     # The tests run with tests/conftest.py adding the repo src/ to sys.path, but run_path keeps things isolated.
     return runpy.run_path(str(mod_path))["fill_out"]
 
