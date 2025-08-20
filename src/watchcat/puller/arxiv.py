@@ -294,19 +294,20 @@ class Arxiv(Source):
                         url=paper_id,
                         paper_url=pdf_url,
                         publish_date=publish_date,
+                        title=title,
                         abstract=abstract,
                         source=f"ArXiv: {title}",
                     )
 
                     papers.append(paper)
 
-                except Exception as e:
+                except Exception:
                     # Skip papers that fail to parse
                     continue
 
             return papers
 
-        except Exception as e:
+        except Exception:
             # If API request fails, return empty list
             # In a production system, you might want to log this error
             return []

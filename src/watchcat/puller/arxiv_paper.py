@@ -39,6 +39,19 @@ class ArxivPaper(Post):
             |{self.abstract}
         """)
 
+    @override
+    def __repr__(self) -> str:
+        return strip_indent(f"""
+            |<Post id={self.id}
+            |      url={self.url}
+            |      published_date={self.published_date}
+            |      pulled_date={self.pulled_date}
+            |      source={self.source}
+            |      attachments={",".join(self.attachments)}>
+            {self.to_prompt()}
+            |</Post>
+        """)
+
     @property
     def published_date(self) -> datetime:
         """Alias for publish_date to match Post protocol."""
