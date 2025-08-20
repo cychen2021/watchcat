@@ -15,12 +15,8 @@ class Topic:
         Returns:
             A dictionary representation of the Topic instance.
         """
-        return {
-            "id": self.id,
-            "description": self.description
-        }
-        
-    
+        return {"id": self.id, "description": self.description}
+
     @classmethod
     def from_serializable(cls, data: dict) -> "Topic":
         """Create a Topic instance from a serializable dictionary.
@@ -31,7 +27,4 @@ class Topic:
         Returns:
             A Topic instance.
         """
-        return cls(
-            id=data["id"],
-            description=data["description"]
-        )
+        return cls(id=data["id"], description=data["description"])

@@ -16,7 +16,9 @@ class Summary:
     def __init__(self, id: str) -> None:
         self.id = id
 
-    def build(self, summary: str, original_content: str, keywords: List[str], category: str) -> Dict[str, object]:
+    def build(
+        self, summary: str, original_content: str, keywords: List[str], category: str
+    ) -> Dict[str, object]:
         """Create a summary item using the instance id.
 
         Args and returns: same as before, but the `id` is taken from

@@ -14,7 +14,9 @@ class Analysis:
     def __init__(self, id: str) -> None:
         self.id = id
 
-    def build(self, related_topics: List[str], envisaged_interaction: str) -> Dict[str, object]:
+    def build(
+        self, related_topics: List[str], envisaged_interaction: str
+    ) -> Dict[str, object]:
         """Create an analysis item using the instance id.
 
         Args and returns: same as before, but the `id` is taken from
