@@ -67,22 +67,16 @@ class ArxivFilter(SourceFilter):
         self.kind = kind
         self.filter_args = filter_args
 
-    def __call__(self, post: Post) -> bool:
+    def __call__(self, post: ArxivPaper) -> bool:
         """Check if a post matches the filter criteria."""
         if not isinstance(post, ArxivPaper):
             return False
 
         if self.kind == ArxivFilterKind.TITLE:
-            # For title filtering, we might need to extract title from URL or use a different approach
-            # Since ArxivPaper doesn't have a title field, we'll check URL or source instead
             if "term" in self.filter_args:
                 term = self.filter_args["term"].lower()
-                # Check if term appears in URL, source, or abstract as a fallback
-                return (
-                    term in post.url.lower()
-                    or term in post.source.lower()
-                    or term in post.abstract.lower()
-                )
+                # Check if term appears in title
+                return term in post.title.lower()
 
         elif self.kind == ArxivFilterKind.AUTHOR:
             # ArxivPaper doesn't have authors field, so we'll search in abstract or source
@@ -99,7 +93,7 @@ class ArxivFilter(SourceFilter):
             if "start" in self.filter_args and "end" in self.filter_args:
                 start_date = self.filter_args["start"]
                 end_date = self.filter_args["end"]
-                return start_date <= post.__published_date <= end_date
+                return start_date <= post.published_date <= end_date
 
         return False
 

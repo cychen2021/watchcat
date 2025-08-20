@@ -51,8 +51,8 @@ class Post(Protocol):
         """
         return unimplemented()
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def from_serializable_object(cls, obj: object) -> "Post":
         """Populate the post content from a serializable representation.
 

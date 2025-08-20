@@ -74,7 +74,7 @@ class MailFilter(SourceFilter):
         self.kind = kind
         self.filter_args = filter_args
 
-    def __call__(self, post: Post) -> bool:
+    def __call__(self, post: Mail) -> bool:
         """Check if a post matches the filter criteria."""
         if not isinstance(post, Mail):
             return False

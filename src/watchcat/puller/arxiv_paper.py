@@ -17,17 +17,17 @@ class ArxivPaper(Post):
         publish_date: datetime,
         title: str,
         abstract: str,
-        __pulled_date: datetime | None = None,
+        pulled_date: datetime | None = None,
         source: str,
     ) -> None:
         self.id = id
         self.url = url
         self.paper_url = paper_url
         self.__published_date = publish_date
-        if __pulled_date is None:
+        if pulled_date is None:
             self.pull_date = datetime.now()
         else:
-            self.pull_date = __pulled_date
+            self.pull_date = pulled_date
         self.source = source
         self.abstract = abstract
         self.title = title
@@ -90,7 +90,7 @@ class ArxivPaper(Post):
             publish_date=datetime.fromisoformat(obj["publish_date"]),
             title=obj["title"],
             abstract=obj["abstract"],
-            __pulled_date=datetime.fromisoformat(obj["pull_date"]),
+            pulled_date=datetime.fromisoformat(obj["pull_date"]),
             source=obj["source"],
         )
         return instance
