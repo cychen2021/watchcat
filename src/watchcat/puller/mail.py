@@ -40,6 +40,20 @@ class Mail(Post):
             |{self.body}
         """)
 
+    @override
+    def __repr__(self) -> str:
+        """String representation of the mail object."""
+        return strip_indent(f"""
+            |<Post id={self.id}
+            |      url={self.url}
+            |      published_date={self.published_date}
+            |      pulled_date={self.pulled_date}
+            |      source={self.source}
+            |      attachments={",".join(self.attachments)}>
+            {self.to_prompt()}
+            |</Post>
+        """)
+
     @property
     @override
     def attachments(self) -> Sequence[str]:
