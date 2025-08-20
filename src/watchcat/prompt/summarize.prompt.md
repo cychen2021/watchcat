@@ -13,11 +13,12 @@ Your summary should be output to a JSON array in a code block. Each element in t
 
 where keywords should be all lower case words separated by underscores, and category can be
 
-- research
-- news
-- blog
-- tutorial
-- other
+- `research`: Research updates such as a conference paper;
+- `news`: News reported by the media or social media;
+- `blog`: Blog posts;
+- `development`: Updates related the the development of some software, e.g., patches to the Linux kernel or a new version of the Rust language;
+- `tool`: Introduction, recommendation, or tutorial of useful tools;
+- `other`.
 
 An example response is as follows:
 
