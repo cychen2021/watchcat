@@ -22,23 +22,22 @@ def test_summary_parse_with_fenced_json():
 
 
 def test_analysis_parse_raw_json_with_extra_text():
-    text = "Analysis results:\n" + json.dumps({
-        "related_topics": ["topic1", "topic2"],
-        "envisaged_interaction": "It may help"
-    })
+    text = "Analysis results:\n" + json.dumps(
+        {"related_topics": ["topic1", "topic2"], "envisaged_interaction": "It may help"}
+    )
     obj = Analysis.parse(text)
     assert "related_topics" in obj
     assert obj["related_topics"][0] == "topic1"
 
 
 def test_evaluation_parse_and_validate():
-    text = "Answer:\n```json\n{\n  \"relevance\": \"high\",\n  \"feasibility\": \"medium\",\n  \"importance\": \"low\"\n}\n```"
+    text = 'Answer:\n```json\n{\n  "relevance": "high",\n  "feasibility": "medium",\n  "importance": "low"\n}\n```'
     obj = Evaluation.parse(text)
     assert obj["relevance"] == "high"
 
 
 def test_evaluation_invalid_rating_raises():
-    text = "{\"relevance\": \"super\", \"feasibility\": \"low\", \"importance\": \"high\"}"
+    text = '{"relevance": "super", "feasibility": "low", "importance": "high"}'
     try:
         Evaluation.parse(text)
         assert False, "Expected ValueError for invalid rating"

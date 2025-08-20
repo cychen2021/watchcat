@@ -62,7 +62,12 @@ class Summary:
         obj = json.loads(json_text)
 
         # Basic shape validation
-        for key in ("summary", "original_content", "keywords", "category_of_the_source"):
+        for key in (
+            "summary",
+            "original_content",
+            "keywords",
+            "category_of_the_source",
+        ):
             if key not in obj:
                 raise ValueError(f"Missing key in summary JSON: {key}")
 

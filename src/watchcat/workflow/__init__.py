@@ -8,6 +8,9 @@ from ..puller import Mailbox, Post, Source, SourceKind
 from .analysis import Analysis
 from .evaluation import Evaluation
 from .summary import Summary
+import json
+import re
+from typing import Any, Dict
 
 
 class Workflow:
@@ -137,11 +140,23 @@ class Workflow:
                 model="gemini-2.0-flash-001", contents=full_prompt
             )
 
-            # Parse the response into Summary objects
-            # For now, create a single summary - this could be enhanced to parse multiple summaries
-            summary = Summary(id="summary_1")
+            # Extract text from the response in a tolerant way
+            text = self._extract_text_from_response(response)
 
-            return [summary]
+            # If Summary class provides a parse method, use it to obtain JSON and an id
+            try:
+                if hasattr(Summary, "parse"):
+                    parsed = Summary.parse(text)
+                    summary_id = parsed.get("id", "summary_1")
+                    summary = Summary(id=summary_id)
+                else:
+                    summary = Summary(id="summary_1")
+
+                return [summary]
+            except Exception:
+                # Parsing failed - return fallback placeholder
+                placeholder_summary = Summary(id="placeholder_summary_1")
+                return [placeholder_summary]
 
         except Exception as e:
             # Fallback for development/testing
@@ -189,11 +204,20 @@ class Workflow:
                 model="gemini-2.0-flash-001", contents=full_prompt
             )
 
-            # Parse the response into Analysis objects
-            # For now, create a single analysis - this could be enhanced to parse multiple analyses
-            analysis = Analysis(id="analysis_1")
+            text = self._extract_text_from_response(response)
 
-            return [analysis]
+            try:
+                if hasattr(Analysis, "parse"):
+                    parsed = Analysis.parse(text)
+                    analysis_id = parsed.get("id", "analysis_1")
+                    analysis = Analysis(id=analysis_id)
+                else:
+                    analysis = Analysis(id="analysis_1")
+
+                return [analysis]
+            except Exception:
+                placeholder_analysis = Analysis(id="placeholder_analysis_1")
+                return [placeholder_analysis]
 
         except Exception as e:
             # Fallback for development/testing
@@ -243,16 +267,73 @@ class Workflow:
                 model="gemini-2.0-flash-001", contents=full_prompt
             )
 
-            # Parse the response into Evaluation objects
-            # For now, create a single evaluation - this could be enhanced to parse multiple evaluations
-            evaluation = Evaluation(id="evaluation_1")
+            text = self._extract_text_from_response(response)
 
-            return [evaluation]
+            try:
+                if hasattr(Evaluation, "parse"):
+                    parsed = Evaluation.parse(text)
+                    evaluation_id = parsed.get("id", "evaluation_1")
+                    evaluation = Evaluation(id=evaluation_id)
+                else:
+                    evaluation = Evaluation(id="evaluation_1")
+
+                return [evaluation]
+            except Exception:
+                placeholder_evaluation = Evaluation(id="placeholder_evaluation_1")
+                return [placeholder_evaluation]
 
         except Exception as e:
             # Fallback for development/testing
             placeholder_evaluation = Evaluation(id="placeholder_evaluation_1")
             return [placeholder_evaluation]
+
+    def _extract_text_from_response(self, response: Any) -> str:
+        """Tolerantly extract human/model text from various response shapes.
+
+        Handles dicts with keys like 'candidates', 'outputs', 'content', 'text',
+        or objects with similar attributes. Falls back to str(response).
+        """
+        # If it's already a string
+        if isinstance(response, str):
+            return response
+
+        # If dict-like
+        if isinstance(response, dict):
+            # common GenAI shapes
+            if "candidates" in response and response["candidates"]:
+                cand = response["candidates"][0]
+                if isinstance(cand, dict):
+                    return cand.get("content") or cand.get("text") or str(cand)
+                return str(cand)
+            if "outputs" in response and response["outputs"]:
+                out = response["outputs"][0]
+                if isinstance(out, dict):
+                    return out.get("content") or out.get("text") or str(out)
+                return str(out)
+            for key in ("content", "text", "message", "response"):
+                if key in response:
+                    return response[key]
+
+            # Fallback to JSON string
+            try:
+                return json.dumps(response)
+            except Exception:
+                return str(response)
+
+        # If object with attributes
+        for attr in ("candidates", "outputs", "content", "text"):
+            if hasattr(response, attr):
+                val = getattr(response, attr)
+                if isinstance(val, list) and val:
+                    first = val[0]
+                    if isinstance(first, dict):
+                        return first.get("content") or first.get("text") or str(first)
+                    return str(first)
+                if isinstance(val, str):
+                    return val
+
+        # Last resort
+        return str(response)
 
     def _store_evaluations_in_database(self, evaluations: Sequence[Evaluation]) -> None:
         """Store generated evaluations in the database.
