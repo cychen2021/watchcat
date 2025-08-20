@@ -1,7 +1,7 @@
 from typing import Protocol, Collection, Callable
 from datetime import datetime
 from abc import abstractmethod
-from phdkit import unimplemented
+from phdkit import unimplemented, strip_indent
 
 
 __all__ = ["Post"]
@@ -21,8 +21,25 @@ class Post(Protocol):
     source: str  # Identifier for the source from which the post was pulled
 
     @abstractmethod
+    def __repr__(self) -> str:
+        return strip_indent(f"""
+            |<Post id={self.id}
+            |      url={self.url}
+            |      published_date={self.published_date}
+            |      pulled_date={self.pulled_date}
+            |      source={self.source}
+            |      attachments={','.join(self.attachments)}>
+            {self.to_prompt()}
+            |</Post>
+        """)
+
     def __str__(self) -> str:
-        unimplemented()
+        return self.to_prompt()
+
+    @abstractmethod
+    def to_prompt(self) -> str:
+        """Convert the post content to a prompt for the language model."""
+        return unimplemented()
 
     @abstractmethod
     def serializable_object(self) -> object:
@@ -32,19 +49,13 @@ class Post(Protocol):
         serialized to JSON or similar formats. This method will be used for storing the post in a
         database or sending it over a network.
         """
-        unimplemented()
+        return unimplemented()
 
     @abstractmethod
-    def from_serializable_object(self, obj: object) -> None:
+    @classmethod
+    def from_serializable_object(cls, obj: object) -> "Post":
         """Populate the post content from a serializable representation.
 
         This method will be used for loading the post from a database or receiving it over a network.
         """
-        unimplemented()
-
-    @abstractmethod
-    def summarize_embedding(
-        self, compute_embedding: Callable[[str], list[float]]
-    ) -> list[float]:
-        """Generate an embedding that summarizes the post content using the provided embedding function."""
-        unimplemented()
+        return unimplemented()
