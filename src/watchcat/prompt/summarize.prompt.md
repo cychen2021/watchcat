@@ -31,7 +31,7 @@ An example response is as follows:
 }
 ```
 
-Your output should contain only the code block enclosed in the ```json <...> ``` marker without any other contents.
+Your output could contain auxiliary contents such as your overall planning of the summary generation process, but you must include one and only one code block enclosed in the ```json <...> ``` marker as the final result.
 
 Some preferences for the summary:
 

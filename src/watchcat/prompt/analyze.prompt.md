@@ -13,7 +13,7 @@ You should imagine how the piece of information provided later may interact with
 - whether they open up new avenues for exploration and discovery, and
 - whether they affect the importance of certain factors in the research landscape.
 
-Your output should be a JSON object in a code block, conforming to the following structure:
+Your output could contain auxiliary contents such as how you arrived at your conclusions and any relevant context, but you must include one and only one code block enclosed in the ```json <...> ``` marker as the final result.
 
 ```json
 {

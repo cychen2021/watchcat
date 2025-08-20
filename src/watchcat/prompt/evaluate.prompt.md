@@ -40,7 +40,7 @@ An example could be:
 }
 ```
 
-Your output should contain only the JSON object enclosed in the ```json``` marker without any other contents.
+Your output could contain auxiliary contents such as why and how the ideas were developed, but you must include one and only one code block enclosed in the ```json <...> ``` marker as the final output.
 
 The ideas are provided as a JSON object as follows:
 
