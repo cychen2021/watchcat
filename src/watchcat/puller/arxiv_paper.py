@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Sequence, override
 from .post import Post
-from phdkit import strip_indent, protect_indent
+from phdkit import strip_indent
 
 
 __all__ = ["ArxivPaper"]
@@ -15,6 +15,7 @@ class ArxivPaper(Post):
         url: str,
         paper_url: str,
         publish_date: datetime,
+        title: str,
         abstract: str,
         __pulled_date: datetime | None = None,
         source: str,
@@ -29,6 +30,14 @@ class ArxivPaper(Post):
             self.pull_date = __pulled_date
         self.source = source
         self.abstract = abstract
+        self.title = title
+
+    @override
+    def to_prompt(self) -> str:
+        return strip_indent(f"""
+            |# {self.title}
+            |{self.abstract}
+        """)
 
     @property
     def published_date(self) -> datetime:
@@ -45,28 +54,12 @@ class ArxivPaper(Post):
     def attachments(self) -> Sequence[str]:
         return [self.paper_url]
 
-    def __str__(self) -> str:
-        return strip_indent(
-            f"""
-            |ArxivPaper(
-            |    id={self.id},
-            |    url={self.url},
-            |    paper_url={self.paper_url},
-            |    publish_date={self.__published_date},
-            |    pull_date={self.pull_date},
-            |    source={self.source},
-            |    abstract={protect_indent(self.abstract)}
-            |)
-            |---
-            |{self.abstract}""",
-            keep_trailing_ws=True,
-        )
-
     @override
     def serializable_object(self) -> dict[str, str]:
         return {
             "id": self.id,
             "url": self.url,
+            "title": self.title,
             "paper_url": self.paper_url,
             "publish_date": self.__published_date.isoformat(),
             "pull_date": self.pull_date.isoformat(),
@@ -75,15 +68,16 @@ class ArxivPaper(Post):
         }
 
     @override
-    def from_serializable_object(self, obj: dict[str, str]) -> None:
-        self.id = obj["id"]
-        self.url = obj["url"]
-        self.paper_url = obj["paper_url"]
-        self.__published_date = datetime.fromisoformat(obj["publish_date"])
-        self.pull_date = datetime.fromisoformat(obj["pull_date"])
-        self.source = obj["source"]
-        self.abstract = obj["abstract"]
-
-    @override
-    def summarize_embedding(self, compute_embedding) -> list[float]:
-        return compute_embedding(self.abstract)
+    @classmethod
+    def from_serializable_object(cls, obj: dict[str, str]) -> "ArxivPaper":
+        instance = cls(
+            id=obj["id"],
+            url=obj["url"],
+            paper_url=obj["paper_url"],
+            publish_date=datetime.fromisoformat(obj["publish_date"]),
+            title=obj["title"],
+            abstract=obj["abstract"],
+            __pulled_date=datetime.fromisoformat(obj["pull_date"]),
+            source=obj["source"],
+        )
+        return instance

@@ -1,4 +1,4 @@
-from typing import Protocol, Collection, Callable
+from typing import Protocol, Collection
 from datetime import datetime
 from abc import abstractmethod
 from phdkit import unimplemented, strip_indent
@@ -28,7 +28,7 @@ class Post(Protocol):
             |      published_date={self.published_date}
             |      pulled_date={self.pulled_date}
             |      source={self.source}
-            |      attachments={','.join(self.attachments)}>
+            |      attachments={",".join(self.attachments)}>
             {self.to_prompt()}
             |</Post>
         """)
