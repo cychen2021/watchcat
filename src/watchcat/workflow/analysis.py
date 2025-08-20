@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from typing import Dict, List
+import json
+import re
+from typing import Any
 
 
 class Analysis:
@@ -27,3 +30,31 @@ class Analysis:
             "envisaged_interaction": envisaged_interaction,
             "id": self.id,
         }
+
+    @classmethod
+    def parse(cls, text: str) -> Dict[str, Any]:
+        """Parse LLM response text and return the analysis dict.
+
+        Accepts responses containing a ```json ... ``` fenced block or raw JSON.
+        """
+        if text is None:
+            raise ValueError("No text to parse")
+
+        m = re.search(r"```json\s*(\{.*?\})\s*```", text, flags=re.S)
+        json_text = None
+        if m:
+            json_text = m.group(1)
+        else:
+            m2 = re.search(r"(\{(?:.|\n)*\})", text, flags=re.S)
+            if m2:
+                json_text = m2.group(1)
+
+        if not json_text:
+            raise ValueError("No JSON object found in text")
+
+        obj = json.loads(json_text)
+
+        if "related_topics" not in obj or "envisaged_interaction" not in obj:
+            raise ValueError("Missing keys in analysis JSON")
+
+        return obj
