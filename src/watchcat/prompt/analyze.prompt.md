@@ -3,7 +3,7 @@ You are a research assistant who filters information collected from the web to s
 The researcher is interested in the following topics:
 
 ```json
-?<TOPICS>?
+?<TOPICS: json>?
 ```
 
 You should imagine how the piece of information provided later may interact with these topics. Possibilities include but are not limited to:
@@ -41,4 +41,6 @@ Your output should contain only the code block enclosed in the ```json <...> ```
 
 The piece of information for you to analyze is as follows:
 
-?<SUMMARIZED_OBJECT>?
+```json
+?<SUMMARIZED_OBJECT: json>?
+```

@@ -69,20 +69,41 @@ def fill_out(template: str, **kwargs) -> str:
     if template is None:
         raise ValueError("template must be a non-empty string")
 
-    # find all placeholders of the form ?<NAME>? where NAME can contain
-    # letters, numbers, underscores, hyphens and slashes (to allow json-like
-    # keys used in some templates). We will be permissive and capture any
-    # sequence of characters that is not a question mark.
-    pattern = re.compile(r"\?<([^?]+)\>\?")
+    # find all placeholders of the form ?<NAME>? or ?<NAME: fmt>? where
+    # NAME can contain any char except '?' and fmt is an optional format
+    # indicator such as 'json' or 'text'. If fmt is missing or empty default to 'text'.
+    # Examples matched: ?<TOPICS>?, ?<TOPICS: json>?, ?<SUMMARY: text>?, ?<PH:>?
+    # Match closing literal '?' as well so placeholders like ?<NAME>? are
+    # fully consumed by the regex.
+    pattern = re.compile(r"\?<([^?:>]+)(?:\s*:\s*([^>]*))?\>?\?")
 
     def _render(match: re.Match) -> str:
-        key = match.group(1)
-        if key not in kwargs:
-            raise KeyError(f"Placeholder '{key}' not provided")
-        val = kwargs[key]
-        if isinstance(val, str):
-            return val
-        # JSON-encode non-strings in a compact form
-        return json.dumps(val, ensure_ascii=False)
+        name = match.group(1)
+        fmt = match.group(2)
+        # normalize format and default to 'text' when missing or blank
+        if fmt is None:
+            fmt = "text"
+        else:
+            fmt = fmt.strip().lower() if fmt.strip() != "" else "text"
+
+        if name not in kwargs:
+            raise KeyError(f"Placeholder '{name}' not provided")
+
+        val = kwargs[name]
+
+        if fmt == "json":
+            # For json format always encode using compact JSON
+            return json.dumps(val, ensure_ascii=False)
+        elif fmt == "text":
+            # For text format, keep strings as-is. For non-strings encode as
+            # compact JSON so structures (lists/dicts) are preserved with
+            # consistent, machine-friendly representation.
+            if isinstance(val, str):
+                return val
+            return json.dumps(val, ensure_ascii=False)
+        else:
+            # Unknown format indicator — be strict and raise an error so
+            # templates don't silently behave unexpectedly.
+            raise ValueError(f"Unknown placeholder format '{fmt}' for '{name}'")
 
     return pattern.sub(_render, template)

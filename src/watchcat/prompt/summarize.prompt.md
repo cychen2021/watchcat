@@ -45,4 +45,4 @@ The bundled information collected from the web is provided below the separation 
 
 # The information collected from the web
 
-?<COLLECTION>?
+?<COLLECTION: text>?

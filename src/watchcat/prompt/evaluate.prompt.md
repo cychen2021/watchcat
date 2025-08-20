@@ -3,7 +3,7 @@ You are a research assistant who evaluates possible ideas related to the topics 
 The researcher is interested in the following topics:
 
 ```json
-?<TOPICS>?
+?<TOPICS: json>?
 ```
 
 You should evaluate the following three aspects of the ideas:
@@ -45,5 +45,5 @@ Your output should contain only the JSON object enclosed in the ```json``` marke
 The ideas are provided as a JSON object as follows:
 
 ```json
-?<IDEA>?
+?<IDEA: json>?
 ```
