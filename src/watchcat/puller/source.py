@@ -9,7 +9,6 @@ __all__ = ["SourceKind", "SourceFilter", "Source"]
 
 class SourceKind(Enum):
     ARXIV = "arxiv"
-    ZULIP = "zulip"
     MAIL = "mail"
 
 
@@ -19,22 +18,22 @@ class SourceFilter(Protocol):
     @abstractmethod
     def __call__(self, post: Post) -> bool:
         """Check if a post matches the filter criteria."""
-        unimplemented()
+        return unimplemented()
 
     @abstractmethod
     def __and__(self, other: "SourceFilter") -> "SourceFilter":
         """Combine two filters with a logical AND."""
-        unimplemented()
+        return unimplemented()
 
     @abstractmethod
     def __or__(self, other: "SourceFilter") -> "SourceFilter":
         """Combine two filters with a logical OR."""
-        unimplemented()
+        return unimplemented()
 
     @abstractmethod
     def __invert__(self) -> "SourceFilter":
         """Invert the filter."""
-        unimplemented()
+        return unimplemented()
 
 
 class Source(Protocol):
@@ -57,4 +56,4 @@ class Source(Protocol):
                       meaning that only posts that match all filters will be returned. `Source` should pull
                       all available posts if no filters are provided.
         """
-        unimplemented()
+        return unimplemented()
