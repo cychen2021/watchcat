@@ -271,9 +271,9 @@ class TestPullerIntegration:
             received_date=datetime.now(),
             source="test",
         )
-        assert arxiv_filter(mail) is False
-        
-        # Mail filter should reject ArxivPaper objects  
+        assert arxiv_filter(mail) is False # type: ignore
+
+        # Mail filter should reject ArxivPaper objects
         mail_filter = MailFilter(MailFilterKind.SUBJECT, term="test")
         paper = ArxivPaper(
             id="test",
@@ -284,4 +284,4 @@ class TestPullerIntegration:
             abstract="test content",
             source="test",
         )
-        assert mail_filter(paper) is False
+        assert mail_filter(paper) is False # type: ignore
