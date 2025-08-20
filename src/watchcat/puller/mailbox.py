@@ -14,7 +14,7 @@ from .post import Post
 
 class MailFilterKind(Enum):
     """Types of filters for mailbox content."""
-    
+
     SUBJECT = "subject"
     SENDER = "sender"
     BODY = "body"
@@ -124,7 +124,7 @@ class MailFilter(SourceFilter):
 
 class Mailbox(Source):
     """A mailbox source that can pull emails from IMAP or POP3 servers."""
-    
+
     kind: SourceKind = SourceKind.MAIL
 
     def __init__(
@@ -231,7 +231,12 @@ class Mailbox(Source):
                 try:
                     # Fetch email
                     status, msg_data = mail_server.fetch(message_id, "(RFC822)")
-                    if status != "OK" or not msg_data or not msg_data[0] or len(msg_data[0]) < 2:
+                    if (
+                        status != "OK"
+                        or not msg_data
+                        or not msg_data[0]
+                        or len(msg_data[0]) < 2
+                    ):
                         continue
 
                     # Parse email
@@ -283,7 +288,7 @@ class Mailbox(Source):
                     # Retrieve email
                     raw_email = b"\r\n".join(mail_server.retr(i)[1])
                     email_msg = email.message_from_bytes(raw_email)
-                    
+
                     mail_obj = self._parse_email_to_mail(email_msg, str(i))
                     if mail_obj:
                         emails.append(mail_obj)
