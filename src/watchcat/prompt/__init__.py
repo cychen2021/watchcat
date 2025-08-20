@@ -41,7 +41,7 @@ def load_prompt_template(name: str) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def fill_out(template: str, **kwargs) -> str:
+def fill_out_prompt(template: str, **kwargs) -> str:
     """Fill out a prompt template by substituting placeholders.
 
     Placeholders use the pattern `?<NAME>?` (for example `?<TOPICS>?`).
