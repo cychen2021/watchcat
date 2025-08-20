@@ -39,3 +39,50 @@ def load_prompt_template(name: str) -> str:
         )
 
     return path.read_text(encoding="utf-8")
+
+def fill_out(template: str, **kwargs) -> str:
+    """Fill out a prompt template by substituting placeholders.
+
+    Placeholders use the pattern `?<NAME>?` (for example `?<TOPICS>?`).
+
+    Rules:
+    - If a placeholder's value in ``kwargs`` is a string, it is inserted as-is.
+    - If the value is not a string, it is JSON-encoded (compact) before
+      insertion so structures (lists/dicts) are preserved.
+    - If the template contains a placeholder for which no kwarg was
+      provided a KeyError is raised naming the missing placeholder.
+
+    Args:
+        template: The template string containing zero or more placeholders.
+        **kwargs: Mapping of placeholder names to values to insert.
+
+    Returns:
+        The template with placeholders substituted.
+
+    Raises:
+        KeyError: If a placeholder in the template has no corresponding
+            value in ``kwargs``.
+    """
+    import re
+    import json
+
+    if template is None:
+        raise ValueError("template must be a non-empty string")
+
+    # find all placeholders of the form ?<NAME>? where NAME can contain
+    # letters, numbers, underscores, hyphens and slashes (to allow json-like
+    # keys used in some templates). We will be permissive and capture any
+    # sequence of characters that is not a question mark.
+    pattern = re.compile(r"\?<([^?]+)\>\?")
+
+    def _render(match: re.Match) -> str:
+        key = match.group(1)
+        if key not in kwargs:
+            raise KeyError(f"Placeholder '{key}' not provided")
+        val = kwargs[key]
+        if isinstance(val, str):
+            return val
+        # JSON-encode non-strings in a compact form
+        return json.dumps(val, ensure_ascii=False)
+
+    return pattern.sub(_render, template)
