@@ -8,6 +8,7 @@ returns the file content as a string. If the requested template does not
 exist a FileNotFoundError is raised and the list of available templates
 is included in the message.
 """
+
 from pathlib import Path
 from typing import List
 
