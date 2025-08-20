@@ -38,3 +38,11 @@ Some preferences for the summary:
 - Include the most important examples, evidence, or statistics contained in the original content that support the summary;
 - Maintain a clear and concise writing style.
 - Consists of 3-5 statements.
+
+The bundled information collected from the web is provided below the separation line here.
+
+---
+
+# The information collected from the web
+
+?<COLLECTION>?
