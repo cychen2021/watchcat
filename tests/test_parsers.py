@@ -10,7 +10,7 @@ def test_summary_parse_with_fenced_json():
 ```json
 {
   "summary": "Short summary",
-  "original_content": "Full content...",
+  "source_id": "paper_1",
   "keywords": ["key1", "key2"],
   "category_of_the_source": "research"
 }

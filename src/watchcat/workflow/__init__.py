@@ -134,7 +134,7 @@ class Workflow:
 
             # Fill out the prompt template with the orchestrated content
             full_prompt = fill_out_prompt(
-                summarize_template, content=orchestrated_prompt
+                summarize_template, content=orchestrated_prompt, language="Chinese"
             )
 
             # Generate content using Google GenAI
@@ -199,7 +199,7 @@ class Workflow:
             )
 
             # Fill out the prompt template with the summaries
-            full_prompt = fill_out_prompt(analyze_template, content=summaries_text)
+            full_prompt = fill_out_prompt(analyze_template, content=summaries_text, language="Chinese")
 
             # Generate content using Google GenAI
             response = client.models.generate_content(
@@ -262,7 +262,7 @@ class Workflow:
             )
 
             # Fill out the prompt template with the analyses
-            full_prompt = fill_out_prompt(evaluate_template, content=analyses_text)
+            full_prompt = fill_out_prompt(evaluate_template, content=analyses_text, language="Chinese")
 
             # Generate content using Google GenAI
             response = client.models.generate_content(
