@@ -39,6 +39,8 @@ The preferences for the contents of the envisaged interactions:
 
 Your output should contain only the code block enclosed in the ```json <...> ``` marker without any other contents.
 
+The textual contents in your output should be in ?<LANGUAGE>?.
+
 The piece of information for you to analyze is as follows:
 
 ```json

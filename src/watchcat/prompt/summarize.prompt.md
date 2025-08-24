@@ -33,6 +33,8 @@ An example response is as follows:
 
 Your output could contain auxiliary contents such as your overall planning of the summary generation process, but you must include one and only one code block enclosed in the ```json <...> ``` marker as the final result.
 
+The textual contents in your output should be in ?<LANGUAGE>?.
+
 Some preferences for the summary:
 
 - Focus on the key aspects;
