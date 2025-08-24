@@ -36,12 +36,7 @@ class Workflow:
         5. Generate analyses of summaries
         6. Generate evaluations of analyses
         """
-        # Pull posts from all sources.
-        # Currently, we only consider `Mailbox` sources and don't apply any filter
-        all_posts = self._pull_posts_from_sources()
-
-        # Store the pulled posts in the database
-        self._store_posts_in_database(all_posts)
+        all_posts = self.pull()
 
         # Orchestrate the posts into a single prompt
         orchestrated_prompt = self._orchestrate_posts_to_prompt(all_posts)
@@ -60,6 +55,12 @@ class Workflow:
         # and store them in the database
         evaluations = self._generate_evaluations(analyses)
         self._store_evaluations_in_database(evaluations)
+
+    def pull(self) -> Sequence[Post]:
+        """Pull and store posts."""
+        posts = self._pull_posts_from_sources()
+        self._store_posts_in_database(posts)
+        return posts
 
     def _pull_posts_from_sources(self) -> Sequence[Post]:
         """Pull posts from all configured sources.
