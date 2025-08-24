@@ -32,6 +32,10 @@ class ArxivPaper(Post):
     @override
     def to_prompt(self) -> str:
         return strip_indent(f"""
+            |---
+            |source_id: arxiv_{self.id.replace(".", "_")}
+            |---
+            |
             |# {self.title}
             |{self.abstract}
         """)

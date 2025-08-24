@@ -33,6 +33,10 @@ class Mail(Post):
     def to_prompt(self) -> str:
         """Convert the mail content to a prompt for the language model."""
         return strip_indent(f"""
+            |---
+            |source_id: mail_{self.id}
+            |---
+            |
             |# {self.subject}
             |{self.body}
         """)

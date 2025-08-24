@@ -20,7 +20,7 @@ class Summary:
         self.id = id
 
     def build(
-        self, summary: str, original_content: str, keywords: List[str], category: str
+        self, summary: str, source_id: str, keywords: List[str], category: str
     ) -> Dict[str, object]:
         """Create a summary item using the instance id.
 
@@ -29,7 +29,7 @@ class Summary:
         """
         return {
             "summary": summary,
-            "original_content": original_content,
+            "source_id": source_id,
             "keywords": keywords,
             "category_of_the_source": category,
             "id": self.id,
@@ -64,7 +64,7 @@ class Summary:
         # Basic shape validation
         for key in (
             "summary",
-            "original_content",
+            "source_id",
             "keywords",
             "category_of_the_source",
         ):

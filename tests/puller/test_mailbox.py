@@ -349,7 +349,7 @@ class TestMailbox:
         ) as mock_parse_date:
             mock_parse_date.return_value = datetime(2023, 6, 15, 12, 0, 0)
 
-            mail = mailbox._parse_email_to_mail(mock_email, "123")
+            mail = mailbox._parse_email(mock_email, "123")
 
             assert mail is not None
             assert mail.id == "123"
@@ -391,7 +391,7 @@ class TestMailbox:
         ) as mock_parse_date:
             mock_parse_date.return_value = datetime(2023, 6, 15, 12, 0, 0)
 
-            mail = mailbox._parse_email_to_mail(mock_email, "123")
+            mail = mailbox._parse_email(mock_email, "123")
 
             assert mail is not None
             assert mail.body == "Email body text"
@@ -410,7 +410,7 @@ class TestMailbox:
         mock_email = Mock()
         mock_email.get.side_effect = Exception("Parsing error")
 
-        mail = mailbox._parse_email_to_mail(mock_email, "123")
+        mail = mailbox._parse_email(mock_email, "123")
         assert mail is None
 
     @patch("watchcat.puller.mailbox.imaplib.IMAP4_SSL")

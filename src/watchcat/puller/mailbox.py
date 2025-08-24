@@ -245,7 +245,7 @@ class Mailbox(Source):
                         email_msg = email.message_from_bytes(raw_email)
                     else:
                         email_msg = email.message_from_string(str(raw_email))
-                    mail_obj = self._parse_email_to_mail(email_msg, message_id.decode())
+                    mail_obj = self._parse_email(email_msg, message_id.decode())
                     if mail_obj:
                         emails.append(mail_obj)
 
@@ -289,7 +289,7 @@ class Mailbox(Source):
                     raw_email = b"\r\n".join(mail_server.retr(i)[1])
                     email_msg = email.message_from_bytes(raw_email)
 
-                    mail_obj = self._parse_email_to_mail(email_msg, str(i))
+                    mail_obj = self._parse_email(email_msg, str(i))
                     if mail_obj:
                         emails.append(mail_obj)
 
@@ -354,7 +354,7 @@ class Mailbox(Source):
             since_date = (datetime.now() - timedelta(days=30)).strftime("%d-%b-%Y")
             return f"SINCE {since_date}"
 
-    def _parse_email_to_mail(self, email_msg: Message, msg_id: str) -> Mail | None:
+    def _parse_email(self, email_msg: Message, msg_id: str) -> Mail | None:
         """Parse an email message into a Mail object."""
         try:
             # Extract basic information
