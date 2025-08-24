@@ -104,13 +104,15 @@ class Workflow:
         prompt_parts.append("# Combined Posts for Analysis\n")
 
         for i, post in enumerate(posts, 1):
-            prompt_parts.append(f"## Post {i}")
-            prompt_parts.append(f"Source: {post.source}")
-            prompt_parts.append(f"Published: {post.published_date}")
-            prompt_parts.append(f"URL: {post.url}")
+            prompt_parts.append("Begin of pulled posts")
+            prompt_parts.append("")
+            prompt_parts.append("---")
             prompt_parts.append("")
             prompt_parts.append(post.to_prompt())
             prompt_parts.append("")
+            prompt_parts.append("---")
+            prompt_parts.append("")
+            prompt_parts.append("End of pulled posts")
 
         return "\n".join(prompt_parts)
 
