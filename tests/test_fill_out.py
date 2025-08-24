@@ -12,7 +12,7 @@ def _load_fill_out():
         / "__init__.py"
     )
     # The tests run with tests/conftest.py adding the repo src/ to sys.path, but run_path keeps things isolated.
-    return runpy.run_path(str(mod_path))["fill_out"]
+    return runpy.run_path(str(mod_path))["fill_out_prompt"]
 
 
 def test_fill_out_string_and_json():

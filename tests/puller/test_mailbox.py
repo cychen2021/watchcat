@@ -437,7 +437,7 @@ class TestMailbox:
         )
 
         # Mock email parsing
-        with patch.object(mailbox, "_parse_email_to_mail") as mock_parse:
+        with patch.object(mailbox, "_parse_email") as mock_parse:
             mock_mail = Mock(spec=Mail)
             mock_parse.return_value = mock_mail
 
@@ -483,7 +483,7 @@ class TestMailbox:
         )
 
         # Mock email parsing
-        with patch.object(mailbox, "_parse_email_to_mail") as mock_parse:
+        with patch.object(mailbox, "_parse_email") as mock_parse:
             mock_mail = Mock(spec=Mail)
             mock_parse.return_value = mock_mail
 
@@ -546,7 +546,7 @@ class TestMailbox:
         mock_filter = Mock()
         mock_filter.return_value = False
 
-        with patch.object(mailbox, "_parse_email_to_mail") as mock_parse:
+        with patch.object(mailbox, "_parse_email") as mock_parse:
             mock_mail = Mock(spec=Mail)
             mock_parse.return_value = mock_mail
 
