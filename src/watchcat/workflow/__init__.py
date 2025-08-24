@@ -199,7 +199,9 @@ class Workflow:
             )
 
             # Fill out the prompt template with the summaries
-            full_prompt = fill_out_prompt(analyze_template, content=summaries_text, language="Chinese")
+            full_prompt = fill_out_prompt(
+                analyze_template, content=summaries_text, language="Chinese"
+            )
 
             # Generate content using Google GenAI
             response = client.models.generate_content(
@@ -262,7 +264,9 @@ class Workflow:
             )
 
             # Fill out the prompt template with the analyses
-            full_prompt = fill_out_prompt(evaluate_template, content=analyses_text, language="Chinese")
+            full_prompt = fill_out_prompt(
+                evaluate_template, content=analyses_text, language="Chinese"
+            )
 
             # Generate content using Google GenAI
             response = client.models.generate_content(
