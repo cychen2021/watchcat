@@ -7,10 +7,8 @@ from phdkit.configlib import configurable, setting, TomlReader, config
 DEFAULT_CONFIG_FILE = str(Path(xdg_config_home()) / "watchcat" / "config.toml")
 DEFAULT_ENV_FILE = str(Path(xdg_config_home()) / "watchcat" / "env.toml")
 
-@configurable(
-    TomlReader(DEFAULT_CONFIG_FILE),
-    load_env=TomlReader(DEFAULT_ENV_FILE)
-)
+
+@configurable(TomlReader(DEFAULT_CONFIG_FILE), load_env=TomlReader(DEFAULT_ENV_FILE))
 class App:
     @setting("email.provider")
     def email_provider(self) -> str: ...
@@ -27,6 +25,7 @@ class App:
     def run(self):
         unimplemented()
 
+
 @click.command()
 @click.option("--develop/--prod", help="Enable in-development mode.", default=True)
 @click.option(
@@ -35,7 +34,7 @@ class App:
     "-c",
     default=DEFAULT_CONFIG_FILE,
     show_default=True,
-    type=click.Path(exists=True)
+    type=click.Path(exists=True),
 )
 @click.option(
     "env_file",
@@ -43,7 +42,7 @@ class App:
     "-e",
     default=DEFAULT_ENV_FILE,
     show_default=True,
-    type=click.Path(exists=True)
+    type=click.Path(exists=True),
 )
 def main(develop: bool, config_file: str, env_file: str) -> None:
     app = App()
