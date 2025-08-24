@@ -17,6 +17,7 @@ This directory contains comprehensive unit tests and mock tests for the `watchca
 The test suite covers:
 
 #### ArxivPaper (`test_arxiv_paper.py`)
+
 - Object initialization with and without pulled date
 - Property accessors (attachments, published_date, pulled_date)
 - String representation methods (to_prompt, __repr__)
@@ -25,6 +26,7 @@ The test suite covers:
 - Multi-line abstract handling
 
 #### Mail (`test_mail.py`)
+
 - Object initialization with and without pulled date
 - Empty and populated attachments handling
 - String representation methods (to_prompt, __repr__)
@@ -33,17 +35,19 @@ The test suite covers:
 - Multi-line body content handling
 
 #### Source Enums (`test_source.py`)
+
 - SourceKind enum values and members
 - String representation of enum values
 
 #### Arxiv Source (`test_arxiv.py`)
+
 - **ArxivFilter Tests:**
   - Filter initialization and configuration
   - Title, abstract, author, and date filtering
   - Filter combinations (AND, OR, NOT operations)
   - Combined filter behavior and double inversion
   - Non-ArxivPaper object filtering
-  
+
 - **Arxiv Source Tests:**
   - Source initialization
   - Query construction for different filter types
